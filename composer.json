@@ -10,6 +10,8 @@
         "php": ">=5.3"
     },
     "require-dev": {
-        "phpunit/phpunit": "@stable"
+        "phpunit/phpunit": "@stable",
+        "squizlabs/php_codesniffer": "@stable",
+        "satooshi/php-coveralls": "@stable"
     }
 }
