@@ -1,0 +1,15 @@
+{
+    "name": "bentools/iterable-functions",
+    "description": "Provides functions for iterable variables: is_iterable(), iterable_to_array()",
+    "type": "library",
+    "license": "MIT",
+    "autoload": {
+        "files": ["src/iterable-functions.php"]
+    },
+    "require": {
+        "php": ">=5.3"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "@stable"
+    }
+}
