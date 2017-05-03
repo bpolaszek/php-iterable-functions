@@ -43,7 +43,12 @@ if (!function_exists('iterable_to_traversable')) {
         } elseif (is_array($iterable)) {
             return new ArrayIterator($iterable);
         } else {
-            throw new \InvalidArgumentException(sprintf('Expected array or \\Traversable, got %s', is_object($iterable) ? get_class($iterable) : gettype($iterable)));
+            throw new \InvalidArgumentException(
+                sprintf(
+                    'Expected array or \\Traversable, got %s',
+                    is_object($iterable) ? get_class($iterable) : gettype($iterable)
+                )
+            );
         }
     }
 }
