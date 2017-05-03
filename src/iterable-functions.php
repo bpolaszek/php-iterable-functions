@@ -25,3 +25,18 @@ if (!function_exists('iterable_to_array')) {
         return is_array($iterable) ? $iterable : iterator_to_array($iterable);
     }
 }
+
+if (!function_exists('iterable_to_traversable')) {
+    function iterable_to_traversable($iterable)
+    {
+        if ($iterable instanceof Traversable) {
+            return $iterable;
+        }
+        elseif (is_array($iterable)) {
+            return new ArrayIterator($iterable);
+        }
+        else {
+            throw new \InvalidArgumentException(sprintf('Expected array or \\Traversable, got %s', is_object($iterable) ? get_class($iterable) : gettype($iterable)));
+        }
+    }
+}

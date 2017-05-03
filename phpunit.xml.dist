@@ -19,6 +19,7 @@
         <testsuite name="Test Suite">
            <file>tests/TestIsIterable.php</file>
            <file>tests/TestIterableToArray.php</file>
+           <file>tests/TestIterableToTraversable.php</file>
         </testsuite>
     </testsuites>
     <filter>
