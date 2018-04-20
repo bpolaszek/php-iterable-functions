@@ -1,12 +1,17 @@
 language: php
 
 php:
-  - 5.3
   - 5.4
   - 5.5
   - 5.6
   - 7.0
   - 7.1
+  - 7.2
+
+matrix:
+  include:
+    - php: 5.3
+      dist: precise
 
 before_script:
   - travis_retry composer self-update
@@ -14,9 +19,10 @@ before_script:
   - travis_retry phpenv rehash
 
 script:
-  - ./vendor/bin/phpcs --standard=psr2 src/
-  - mkdir -p build/logs
+  - if [[ ${TRAVIS_PHP_VERSION:0:3} == "5.3" ]]; then composer require --dev symfony/polyfill-php54; fi
   - ./vendor/bin/phpunit --coverage-clover build/logs/clover.xml
+  - ./vendor/bin/phpcs --standard=psr2 -n src/
+  - mkdir -p build/logs
 
 after_script:
   - php vendor/bin/coveralls -v

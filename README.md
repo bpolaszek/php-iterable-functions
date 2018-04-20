@@ -16,7 +16,7 @@ To check wether or not a PHP variable can be looped over in a `foreach` statemen
 
 **But this function only works on PHP7.1+**.
 
-This library ships a portage of this function for previous PHP versions.
+This library ships a polyfill of this function for previous PHP versions.
 
 Usage:
 ```php
@@ -53,6 +53,104 @@ Usage:
 ```php
 var_dump(iterable_to_traversable(array('foo', 'bar'))); // ArrayIterator(array('foo', 'bar'))
 var_dump(iterable_to_traversable(new ArrayIterator(array('foo', 'bar')))); // ArrayIterator(array('foo', 'bar'))
+```
+
+
+iterable_map()
+--------------
+
+Works like an `array_map` with an `array` or a `Traversable`.
+
+```php
+$generator = function () {
+    yield 'foo';
+    yield 'bar';
+};
+
+foreach (iterable_map($generator(), 'strtoupper') as $item) {
+    var_dump($item); // FOO, BAR
+}
+```
+
+iterable_filter()
+--------------
+
+Works like an `array_filter` with an `array` or a `Traversable`.
+
+```php
+$generator = function () {
+    yield 0;
+    yield 1;
+};
+
+foreach (iterable_filter($generator()) as $item) {
+    var_dump($item); // 1
+}
+```
+
+Of course you can define your own filter:
+```php
+$generator = function () {
+    yield 'foo';
+    yield 'bar';
+};
+
+$filter = function ($value) {
+    return 'foo' !== $value;
+};
+
+
+foreach (iterable_filter($generator(), $filter) as $item) {
+    var_dump($item); // bar
+}
+```
+
+
+Iterable factory
+================
+
+When you have an `iterable` type-hint somewhere, and don't know in advance wether you'll pass an `array` or a `Traversable`, just call the magic `iterable()` factory:
+
+```php
+interface SomeInterface
+{
+    /**
+     * Return an iterable list of items
+     * 
+     * @return iterable
+     */
+    public function getItems(): iterable;
+}
+
+class MyService implements SomeInterface
+{
+    /**
+     * @inheritdoc
+     */
+    public function getItems(): iterable
+    {
+        return iterable($this->someOtherService->findAll()):
+    }
+
+}
+```
+
+It even accepts a `null` value (then converting it to an `EmptyIterator`).
+
+You may add a `filter` callable and a `map` callable to make your life easier:
+
+```php
+$data = [
+    'banana',
+    'pineapple',
+    'potato',
+];
+
+$isFruit = function ($eatable) {
+    return 'potato' !== $eatable;
+};
+
+var_dump(iterator_to_array(iterable($data)->withFilter($isFruit)->withMap('strtoupper'))); // ['banana', 'pineapple']
 ```
 
 Installation

@@ -1,5 +1,13 @@
 <?php
 
+use BenTools\IterableFunctions\IterableObject;
+
+if (version_compare(PHP_VERSION, '5.5') >= 0) {
+    include_once __DIR__ . '/iterable-map-php55.php';
+} else {
+    include_once __DIR__ . '/iterable-map-php53.php';
+}
+
 if (!function_exists('is_iterable')) {
 
     /**
@@ -51,4 +59,59 @@ if (!function_exists('iterable_to_traversable')) {
             );
         }
     }
+}
+
+if (!function_exists('iterable_filter')) {
+
+    /**
+     * Filters an iterable.
+     *
+     * @param          $iterable
+     * @param callable $filter
+     * @return array|CallbackFilterIterator
+     * @throws InvalidArgumentException
+     */
+    function iterable_filter($iterable, $filter = null)
+    {
+        if (!is_iterable($iterable)) {
+            throw new \InvalidArgumentException(
+                sprintf('Expected array or Traversable, got %s', is_object($iterable) ? get_class($iterable) : gettype($iterable))
+            );
+        }
+
+        // Cannot rely on callable type-hint on PHP 5.3
+        if (null !== $filter && !is_callable($filter) && !$filter instanceof Closure) {
+            throw new InvalidArgumentException(
+                sprintf('Expected callable, got %s', is_object($filter) ? get_class($filter) : gettype($filter))
+            );
+        }
+
+        if (null === $filter) {
+            $filter = function ($value) {
+                return (bool) $value;
+            };
+        }
+
+        if ($iterable instanceof Traversable) {
+            if (!class_exists('CallbackFilterIterator')) {
+                throw new \RuntimeException('Class CallbackFilterIterator not found. Try using a polyfill, like symfony/polyfill-php54');
+            }
+            return new CallbackFilterIterator(new IteratorIterator($iterable), $filter);
+        }
+
+        return array_filter($iterable, $filter);
+    }
+
+}
+
+/**
+ * @param               $iterable
+ * @param callable|null $filter
+ * @param callable|null $map
+ * @return Traversable|IterableObject
+ * @throws InvalidArgumentException
+ */
+function iterable($iterable, $filter = null, $map = null)
+{
+    return new IterableObject($iterable, $filter, $map);
 }

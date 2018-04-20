@@ -4,7 +4,15 @@
     "type": "library",
     "license": "MIT",
     "autoload": {
+        "psr-4": {
+            "BenTools\\IterableFunctions\\": "src"
+        },
         "files": ["src/iterable-functions.php"]
+    },
+    "autoload-dev": {
+        "files": [
+            "vendor/symfony/var-dumper/Resources/functions/dump.php"
+        ]
     },
     "require": {
         "php": ">=5.3"
@@ -12,6 +20,7 @@
     "require-dev": {
         "phpunit/phpunit": "@stable",
         "squizlabs/php_codesniffer": "@stable",
-        "satooshi/php-coveralls": "@stable"
+        "satooshi/php-coveralls": "@stable",
+        "symfony/var-dumper": "@stable"
     }
 }
