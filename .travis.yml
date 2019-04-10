@@ -1,28 +1,31 @@
 language: php
 
 php:
-  - 5.4
-  - 5.5
-  - 5.6
-  - 7.0
-  - 7.1
-  - 7.2
+  - '5.4'
+  - '5.5'
+  - '5.6'
+  - '7.0'
+  - '7.1'
+  - '7.2'
+  - '7.3'
 
 matrix:
   include:
-    - php: 5.3
+    - php: '5.3'
       dist: precise
 
 before_script:
   - travis_retry composer self-update
-  - travis_retry composer install --no-interaction --prefer-source --dev
+  - travis_retry composer global require hirak/prestissimo
+  - travis_retry composer install --no-interaction --prefer-dist
   - travis_retry phpenv rehash
 
 script:
   - if [[ ${TRAVIS_PHP_VERSION:0:3} == "5.3" ]]; then composer require --dev symfony/polyfill-php54; fi
-  - ./vendor/bin/phpunit --coverage-clover build/logs/clover.xml
+  - if [[ $TRAVIS_PHP_VERSION = 5.5.* || $TRAVIS_PHP_VERSION = 5.6.* || $TRAVIS_PHP_VERSION = 7.* ]]; then composer require --dev php-coveralls/php-coveralls; fi
+  - if [[ $TRAVIS_PHP_VERSION = 5.5.* || $TRAVIS_PHP_VERSION = 5.6.* || $TRAVIS_PHP_VERSION = 7.* ]]; then ./vendor/bin/phpunit --coverage-clover build/logs/clover.xml; else ./vendor/bin/phpunit; fi
   - ./vendor/bin/phpcs --standard=psr2 -n src/
   - mkdir -p build/logs
 
 after_script:
-  - php vendor/bin/coveralls -v
+  - php vendor/bin/php-coveralls -v
