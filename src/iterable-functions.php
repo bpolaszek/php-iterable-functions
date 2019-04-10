@@ -27,12 +27,13 @@ if (!function_exists('iterable_to_array')) {
     /**
      * Copy the iterable into an array. If the iterable is already an array, return it.
      *
-     * @param  array|\Traversable $iterable
+     * @param  iterable $iterable
+     * @param  bool $use_keys [optional] Whether to use the iterator element keys as index.
      * @return array
      */
-    function iterable_to_array($iterable)
+    function iterable_to_array($iterable, $use_keys = true)
     {
-        return is_array($iterable) ? $iterable : iterator_to_array($iterable);
+        return is_array($iterable) ? ($use_keys ? $iterable : array_values($iterable)) : iterator_to_array($iterable, $use_keys);
     }
 }
 

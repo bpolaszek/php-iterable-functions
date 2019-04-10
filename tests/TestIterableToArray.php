@@ -16,10 +16,22 @@ class TestIterableToArray extends TestCase
         $this->assertEquals(array('foo', 'bar'), iterable_to_array($iterator));
     }
 
+    public function testIteratorWithoutKeysToArray()
+    {
+        $iterator = new ArrayIterator(array(1 => 'foo', 2 => 'bar'));
+        $this->assertEquals(array(0 => 'foo', 1 => 'bar'), iterable_to_array($iterator, false));
+    }
+
     public function testArrayToArray()
     {
         $array = array('foo', 'bar');
         $this->assertEquals(array('foo', 'bar'), iterable_to_array($array));
+    }
+
+    public function testArrayWithoutKeysToArray()
+    {
+        $array = array(1 => 'foo', 2 => 'bar');
+        $this->assertEquals(array(0 => 'foo', 1 => 'bar'), iterable_to_array($array, false));
     }
 
     public function testScalarToArray()
