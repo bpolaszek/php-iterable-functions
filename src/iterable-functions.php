@@ -13,7 +13,7 @@ if (!function_exists('is_iterable')) {
     /**
      * Check wether or not a variable is iterable (i.e array or \Traversable)
      *
-     * @param  array|\Traversable $iterable
+     * @param  mixed $iterable
      * @return bool
      */
     function is_iterable($iterable)
@@ -27,8 +27,8 @@ if (!function_exists('iterable_to_array')) {
     /**
      * Copy the iterable into an array. If the iterable is already an array, return it.
      *
-     * @param  iterable $iterable
-     * @param  bool $use_keys [optional] Whether to use the iterator element keys as index.
+     * @param  iterable|array|\Traversable $iterable
+     * @param  bool                        $use_keys [optional] Whether to use the iterator element keys as index.
      * @return array
      */
     function iterable_to_array($iterable, $use_keys = true)
@@ -42,7 +42,7 @@ if (!function_exists('iterable_to_traversable')) {
     /**
      * If the iterable is not intance of \Traversable, it is an array => convert it to an ArrayIterator.
      *
-     * @param  $iterable
+     * @param  iterable|array|\Traversable $iterable
      * @return \Traversable
      */
     function iterable_to_traversable($iterable)
@@ -67,8 +67,8 @@ if (!function_exists('iterable_filter')) {
     /**
      * Filters an iterable.
      *
-     * @param          $iterable
-     * @param callable $filter
+     * @param iterable|array|\Traversable $iterable
+     * @param callable                    $filter
      * @return array|CallbackFilterIterator
      * @throws InvalidArgumentException
      */
@@ -106,9 +106,9 @@ if (!function_exists('iterable_filter')) {
 }
 
 /**
- * @param               $iterable
- * @param callable|null $filter
- * @param callable|null $map
+ * @param iterable|array|\Traversable $iterable
+ * @param callable|null               $filter
+ * @param callable|null               $map
  * @return Traversable|IterableObject
  * @throws InvalidArgumentException
  */
