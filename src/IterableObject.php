@@ -27,9 +27,9 @@ final class IterableObject implements IteratorAggregate
 
     /**
      * IterableObject constructor.
-     * @param iterable|array|Traversable 	$iterable
-     * @param callable|null 				$filter
-     * @param callable|null 				$map
+     * @param iterable|array|Traversable $iterable
+     * @param callable|null              $filter
+     * @param callable|null              $map
      * @throws InvalidArgumentException
      */
     public function __construct($iterable, $filter = null, $map = null)

@@ -5,8 +5,8 @@ if (!function_exists('iterable_map')) {
     /**
      * Maps a callable to an iterable.
      *
-     * @param iterable|array|\Traversable 	$iterable
-     * @param callable 						$map
+     * @param iterable|array|\Traversable $iterable
+     * @param callable                    $map
      * @return array|ArrayIterator
      * @throws InvalidArgumentException
      */
