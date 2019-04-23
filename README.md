@@ -55,6 +55,18 @@ var_dump(iterable_to_traversable(array('foo', 'bar'))); // ArrayIterator(array('
 var_dump(iterable_to_traversable(new ArrayIterator(array('foo', 'bar')))); // ArrayIterator(array('foo', 'bar'))
 ```
 
+iterable_to_generator()
+-------------------------
+Generators allow checking for an empty iterable without actually iterating over it (using the valid() method). This is especially useful for one-way iterables.
+
+This function always returns a new Generator. 
+
+Usage:
+```php
+var_dump(iterable_to_generator(array('foo', 'bar'))); // Generator yielding 'foo' => 'bar'
+var_dump(iterable_to_generator(new ArrayIterator(array('foo', 'bar')))); // Generator yielding 'foo' => 'bar'
+```
+
 
 iterable_map()
 --------------
