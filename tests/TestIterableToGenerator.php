@@ -34,16 +34,9 @@ class TestIterableToGenerator extends TestCase
 
     public function testGeneratorToGenerator()
     {
-        $generator = iterable_to_generator($this->createGenerator(array('foo' => 'bar')));
+        $generator = iterable_to_generator(iterable_to_generator(array('foo' => 'bar')));
         $this->assertInstanceOf('Generator', $generator);
         $this->assertEquals(array('foo' => 'bar'), iterable_to_array($generator));
-    }
-
-    private function createGenerator(array $elements)
-    {
-        foreach ($elements as $key => $value) {
-            yield $key => $value;
-        }
     }
 
     /**

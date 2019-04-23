@@ -4,6 +4,7 @@ use BenTools\IterableFunctions\IterableObject;
 
 if (version_compare(PHP_VERSION, '5.5') >= 0) {
     include_once __DIR__ . '/iterable-map-php55.php';
+    include_once __DIR__ . '/iterable-to-generator-php55.php';
 } else {
     include_once __DIR__ . '/iterable-map-php53.php';
 }
@@ -58,27 +59,6 @@ if (!function_exists('iterable_to_traversable')) {
                     is_object($iterable) ? get_class($iterable) : gettype($iterable)
                 )
             );
-        }
-    }
-}
-
-if (!function_exists('iterable_to_generator') && version_compare(PHP_VERSION, '5.5') >= 0) {
-    /**
-     * Creates a new generator from an iterable (useful for being able to use the valid() method for lazily checking if the iterable is empty)
-     *
-     * @param  iterable|array|\Traversable $iterable
-     * @return \Generator
-     */
-    function iterable_to_generator($iterable)
-    {
-        if (!is_iterable($iterable)) {
-            throw new \InvalidArgumentException(
-                sprintf('Expected iterable, got %s', is_object($iterable) ? get_class($iterable) : gettype($iterable))
-            );
-        }
-
-        foreach ($iterable as $key => $value) {
-            yield $key => $value;
         }
     }
 }
