@@ -59,6 +59,8 @@ iterable_to_generator()
 -------------------------
 Generators allow checking for an empty iterable without actually iterating over it (using the valid() method). This is especially useful for one-way iterables.
 
+**This function only works on PHP5.5+**.
+
 This function always returns a new Generator. 
 
 Usage:
