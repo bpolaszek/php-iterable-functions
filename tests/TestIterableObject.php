@@ -67,7 +67,11 @@ class TestIterableObject extends \PHPUnit\Framework\TestCase
         $map = 'strtoupper';
         $iterableObject = iterable(array('foo', 'bar'))->withMap($map)->withFilter($filter);
         $this->assertEquals(array(1 => 'BAR'), iterator_to_array($iterableObject));
+        $iterableObject = iterable(array('foo', 'bar'))->map($map)->filter($filter);
+        $this->assertEquals(array(1 => 'BAR'), iterator_to_array($iterableObject));
         $iterableObject = iterable(array('foo', 'bar'))->withFilter($filter)->withMap($map);
+        $this->assertEquals(array(1 => 'BAR'), iterator_to_array($iterableObject));
+        $iterableObject = iterable(array('foo', 'bar'))->filter($filter)->map($map);
         $this->assertEquals(array(1 => 'BAR'), iterator_to_array($iterableObject));
     }
 

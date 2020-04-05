@@ -65,7 +65,7 @@ final class IterableObject implements IteratorAggregate
      * @param callable $filter
      * @return self
      */
-    public function withFilter($filter)
+    public function filter($filter)
     {
         return new self($this->iterable, $filter, $this->map);
     }
@@ -74,9 +74,29 @@ final class IterableObject implements IteratorAggregate
      * @param callable $map
      * @return self
      */
-    public function withMap($map)
+    public function map($map)
     {
         return new self($this->iterable, $this->filter, $map);
+    }
+
+    /**
+     * @param callable $filter
+     * @return self
+     * @deprecated Use IterableObject::filter instead.
+     */
+    public function withFilter($filter)
+    {
+        return $this->filter($filter);
+    }
+
+    /**
+     * @param callable $map
+     * @return self
+     * @deprecated Use IterableObject::map instead.
+     */
+    public function withMap($map)
+    {
+        return $this->map($map);
     }
 
     /**
