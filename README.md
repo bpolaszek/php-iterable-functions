@@ -116,7 +116,7 @@ interface SomeInterface
 {
     /**
      * Return an iterable list of items
-     * 
+     *
      * @return iterable
      */
     public function getItems(): iterable;
@@ -150,7 +150,7 @@ $isFruit = function ($eatable) {
     return 'potato' !== $eatable;
 };
 
-var_dump(iterator_to_array(iterable($data)->withFilter($isFruit)->withMap('strtoupper'))); // ['banana', 'pineapple']
+var_dump(iterator_to_array(iterable($data)->filter($isFruit)->map('strtoupper'))); // ['banana', 'pineapple']
 ```
 
 Installation
