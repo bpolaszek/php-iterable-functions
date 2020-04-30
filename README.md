@@ -72,6 +72,26 @@ foreach (iterable_map($generator(), 'strtoupper') as $item) {
 }
 ```
 
+iterable_reduce()
+--------------
+
+Works like an `reduce` with an `iterable`.
+
+```php
+$generator = function () {
+    yield 1;
+    yield 2;
+};
+
+$reduce = static function ($carry, $item) {
+    return $carry + $item;
+};
+
+var_dump(
+    iterable_reduce($generator(), $reduce, 0))
+); // 3
+```
+
 iterable_filter()
 --------------
 

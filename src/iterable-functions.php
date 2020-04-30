@@ -105,6 +105,33 @@ if (!function_exists('iterable_filter')) {
 
 }
 
+if (!function_exists('iterable_reduce')) {
+    /**
+     * Reduces an iterable.
+     *
+     * @param iterable<mixed> $iterable
+     * @param callable(mixed, mixed) $reduce
+     * @return mixed
+     *
+     * @psalm-template TValue
+     * @psalm-template TResult
+     *
+     * @psalm-param iterable<TValue> $iterable
+     * @psalm-param callable(TResult|null, TValue) $reduce
+     * @psalm-param TResult|null $initial
+     *
+     * @psalm-return TResult|null
+     */
+    function iterable_reduce($iterable, $reduce, $initial = null)
+    {
+        foreach ($iterable as $item) {
+            $initial = $reduce($initial, $item);
+        }
+
+        return $initial;
+    }
+}
+
 /**
  * @param iterable|array|\Traversable $iterable
  * @param callable|null               $filter
