@@ -17,12 +17,7 @@
 >
     <testsuites>
         <testsuite name="Test Suite">
-           <file>tests/TestIsIterable.php</file>
-           <file>tests/TestIterableToArray.php</file>
-           <file>tests/TestIterableToTraversable.php</file>
-           <file>tests/TestIterableFilter.php</file>
-           <file>tests/TestIterableMap.php</file>
-           <file>tests/TestIterableObject.php</file>
+            <directory>tests</directory>
         </testsuite>
     </testsuites>
     <filter>

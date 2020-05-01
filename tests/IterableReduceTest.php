@@ -2,7 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 
-final class TestIterableReduce extends TestCase
+final class IterableReduceTest extends TestCase
 {
     public function testArrayReduce()
     {

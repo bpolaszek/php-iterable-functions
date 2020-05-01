@@ -1,6 +1,8 @@
 <?php
 
-class TestIterableMap extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+
+final class IterableMapTest extends TestCase
 {
 
     public function testArrayMap()

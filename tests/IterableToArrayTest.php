@@ -2,7 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 
-class TestIterableToArray extends TestCase
+final class IterableToArrayTest extends TestCase
 {
 
     public function testFunctionExists()

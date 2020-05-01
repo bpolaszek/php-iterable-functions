@@ -2,7 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 
-class TestIterableToTraversable extends TestCase
+final class IterableToTraversableTest extends TestCase
 {
 
     public function testFunctionExists()

@@ -1,6 +1,8 @@
 <?php
 
-class TestIterableFilter extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+
+final class IterableFilterTest extends TestCase
 {
 
     public function testArrayFilter()
