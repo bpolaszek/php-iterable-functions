@@ -23,6 +23,9 @@
     "require-dev": {
         "doctrine/coding-standard": "^8.2",
         "pestphp/pest": "^1.0",
+        "phpstan/extension-installer": "^1.1",
+        "phpstan/phpstan": "^0.12.67",
+        "phpstan/phpstan-strict-rules": "^0.12.9",
         "symfony/var-dumper": "^5.2"
     },
     "config": {
