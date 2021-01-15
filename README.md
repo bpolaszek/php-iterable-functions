@@ -1,8 +1,6 @@
 [![Latest Stable Version](https://poser.pugx.org/bentools/iterable-functions/v/stable)](https://packagist.org/packages/bentools/iterable-functions)
-[![License](https://poser.pugx.org/bentools/iterable-functions/license)](https://packagist.org/packages/bentools/iterable-functions)
-[![Build Status](https://img.shields.io/travis/bpolaszek/php-iterable-functions/master.svg?style=flat-square)](https://travis-ci.org/bpolaszek/php-iterable-functions)
-[![Coverage Status](https://coveralls.io/repos/github/bpolaszek/php-iterable-functions/badge.svg?branch=master)](https://coveralls.io/github/bpolaszek/php-iterable-functions?branch=master)
-[![Quality Score](https://img.shields.io/scrutinizer/g/bpolaszek/php-iterable-functions.svg?style=flat-square)](https://scrutinizer-ci.com/g/bpolaszek/php-iterable-functions)
+[![GitHub Actions][GA master image]][GA master]
+[![Code Coverage][Coverage image]][CodeCov Master]
 [![Total Downloads](https://poser.pugx.org/bentools/iterable-functions/downloads)](https://packagist.org/packages/bentools/iterable-functions)
 
 Iterable functions
@@ -191,3 +189,8 @@ Unit tests
 ```
 ./vendor/bin/phpunit
 ```
+
+[CodeCov Master]: https://codecov.io/gh/bpolaszek/php-iterable-functions/branch/2.0.x-dev
+[Coverage image]: https://codecov.io/gh/bpolaszek/php-iterable-functions/branch/2.0.x-dev/graph/badge.svg
+[GA master]: https://github.com/bpolaszek/php-iterable-functions/actions?query=workflow%3A%22Continuous+Integration%22+branch%3A2.0.x-dev
+[GA master image]: https://github.com/bpolaszek/php-iterable-functions/workflows/Continuous%20Integration/badge.svg

@@ -23,11 +23,10 @@ final class IterableFilterTest extends TestCase
         $this->assertEquals(array(1 => 'bar'), iterable_to_array(iterable_filter($iterable, $filter)));
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testInvalidIterable()
     {
+        $this->expectException(InvalidArgumentException::class);
+
         $filter = function () {
             return true;
         };
