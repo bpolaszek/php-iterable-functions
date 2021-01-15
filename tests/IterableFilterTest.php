@@ -23,7 +23,9 @@ it('filters a Traversable object', function (): void {
 
 it('filters an array with a callback', function (): void {
     $iterable = ['foo', 'bar'];
-    $filter = static function ($input): bool {
+    $filter =
+    /** @param mixed $input */
+    static function ($input): bool {
         return $input === 'bar';
     };
     assertEquals([1 => 'bar'], iterable_to_array(iterable_filter($iterable, $filter)));
@@ -31,7 +33,9 @@ it('filters an array with a callback', function (): void {
 
 it('filters a Travsersable object with a callback', function (): void {
     $iterable = SplFixedArray::fromArray(['foo', 'bar']);
-    $filter = static function ($input): bool {
+    $filter =
+    /** @param mixed $input */
+    static function ($input): bool {
         return $input === 'bar';
     };
     assertEquals([1 => 'bar'], iterable_to_array(iterable_filter($iterable, $filter)));

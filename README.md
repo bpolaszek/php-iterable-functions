@@ -1,6 +1,7 @@
 [![Latest Stable Version](https://poser.pugx.org/bentools/iterable-functions/v/stable)](https://packagist.org/packages/bentools/iterable-functions)
 [![GitHub Actions][GA master image]][GA master]
 [![Code Coverage][Coverage image]][CodeCov Master]
+[![Shepherd Type][Shepherd Image]][Shepherd Link]
 [![Total Downloads](https://poser.pugx.org/bentools/iterable-functions/downloads)](https://packagist.org/packages/bentools/iterable-functions)
 
 Iterable functions
@@ -177,7 +178,14 @@ Unit tests
 php vendor/bin/pest
 ```
 
-[CodeCov Master]: https://codecov.io/gh/bpolaszek/php-iterable-functions/branch/2.0.x-dev
-[Coverage image]: https://codecov.io/gh/bpolaszek/php-iterable-functions/branch/2.0.x-dev/graph/badge.svg
 [GA master]: https://github.com/bpolaszek/php-iterable-functions/actions?query=workflow%3A%22Continuous+Integration%22+branch%3A2.0.x-dev
+
 [GA master image]: https://github.com/bpolaszek/php-iterable-functions/workflows/Continuous%20Integration/badge.svg
+
+[CodeCov Master]: https://codecov.io/gh/bpolaszek/php-iterable-functions/branch/2.0.x-dev
+
+[Coverage image]: https://codecov.io/gh/bpolaszek/php-iterable-functions/branch/2.0.x-dev/graph/badge.svg
+
+[Shepherd Image]: https://shepherd.dev/github/bpolaszek/php-iterable-functions/coverage.svg
+
+[Shepherd Link]: https://shepherd.dev/github/bpolaszek/php-iterable-functions
