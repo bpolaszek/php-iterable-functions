@@ -83,7 +83,7 @@ $generator = function () {
     yield 2;
 };
 
-$reduce = static function ($carry, $item) {
+$reduce = function ($carry, $item) {
     return $carry + $item;
 };
 

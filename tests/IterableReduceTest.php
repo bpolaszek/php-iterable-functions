@@ -7,7 +7,7 @@ final class IterableReduceTest extends TestCase
     public function testArrayReduce()
     {
         $iterable = array(1, 2);
-        $reduce = static function ($carry, $item) {
+        $reduce = function ($carry, $item) {
             return $carry + $item;
         };
         self::assertSame(3, iterable_reduce($iterable, $reduce, 0));
@@ -16,7 +16,7 @@ final class IterableReduceTest extends TestCase
     public function testTraversableReduce()
     {
         $iterable = SplFixedArray::fromArray(array(1, 2));
-        $reduce = static function ($carry, $item) {
+        $reduce = function ($carry, $item) {
             return $carry + $item;
         };
         self::assertSame(3, iterable_reduce($iterable, $reduce, 0));
