@@ -80,26 +80,6 @@ final class IterableObject implements IteratorAggregate
     }
 
     /**
-     * @param callable $filter
-     * @return self
-     * @deprecated Use IterableObject::filter instead.
-     */
-    public function withFilter($filter)
-    {
-        return $this->filter($filter);
-    }
-
-    /**
-     * @param callable $map
-     * @return self
-     * @deprecated Use IterableObject::map instead.
-     */
-    public function withMap($map)
-    {
-        return $this->map($map);
-    }
-
-    /**
      * @inheritdoc
      */
     public function getIterator()
