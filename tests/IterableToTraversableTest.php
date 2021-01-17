@@ -1,34 +1,27 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
+use function BenTools\IterableFunctions\iterable_to_traversable;
 
 final class IterableToTraversableTest extends TestCase
 {
-
-    public function testFunctionExists()
+    public function testIteratorToTraversable(): void
     {
-        $this->assertTrue(function_exists('iterable_to_traversable'));
-    }
-
-    public function testIteratorToTraversable()
-    {
-        $iterator = new ArrayIterator(array('foo' => 'bar'));
+        $iterator = new ArrayIterator(['foo' => 'bar']);
         $traversable = iterable_to_traversable($iterator);
         $this->assertSame($iterator, $traversable);
-        $this->assertInstanceOf('Traversable', $iterator);
     }
 
-    public function testArrayToTraversable()
+    public function testArrayToTraversable(): void
     {
-        $array = array('foo' => 'bar');
+        $array = ['foo' => 'bar'];
         $traversable = iterable_to_traversable($array);
-        $this->assertEquals(new ArrayIterator(array('foo' => 'bar')), $traversable);
-        $this->assertInstanceOf('Traversable', $traversable);
+        $this->assertEquals(new ArrayIterator(['foo' => 'bar']), $traversable);
     }
 
-    public function testInvalidArgument()
+    public function testInvalidArgument(): void
     {
-        $this->expectException(InvalidArgumentException::class);
+        $this->expectException(TypeError::class);
 
         $string = 'foo';
         iterable_to_traversable($string);

@@ -2,12 +2,13 @@
 
 namespace BenTools\IterableFunctions;
 
-use Closure;
 use EmptyIterator;
-use InvalidArgumentException;
 use IteratorAggregate;
 use Traversable;
 
+/**
+ * @internal
+ */
 final class IterableObject implements IteratorAggregate
 {
     /**
@@ -18,93 +19,50 @@ final class IterableObject implements IteratorAggregate
     /**
      * @var callable
      */
-    private $filter;
+    private $filterFn;
 
     /**
      * @var callable
      */
-    private $map;
+    private $mapFn;
 
-    /**
-     * IterableObject constructor.
-     * @param iterable|array|Traversable $iterable
-     * @param callable|null              $filter
-     * @param callable|null              $map
-     * @throws InvalidArgumentException
-     */
-    public function __construct($iterable, $filter = null, $map = null)
+    public function __construct(?iterable $iterable = null, ?callable $filter = null, ?callable $map = null)
     {
-        if (null === $iterable) {
-            $iterable = new EmptyIterator();
-        }
-        if (!is_iterable($iterable)) {
-            throw new InvalidArgumentException(
-                sprintf('Expected array or Traversable, got %s', is_object($iterable) ? get_class($iterable) : gettype($iterable))
-            );
-        }
-
-        // Cannot rely on callable type-hint on PHP 5.3
-        if (null !== $filter && !is_callable($filter) && !$filter instanceof Closure) {
-            throw new InvalidArgumentException(
-                sprintf('Expected callable, got %s', is_object($filter) ? get_class($filter) : gettype($filter))
-            );
-        }
-
-        if (null !== $map && !is_callable($map) && !$map instanceof Closure) {
-            throw new InvalidArgumentException(
-                sprintf('Expected callable, got %s', is_object($map) ? get_class($map) : gettype($map))
-            );
-        }
-
-        $this->iterable = $iterable;
-        $this->filter = $filter;
-        $this->map = $map;
+        $this->iterable = $iterable ?? new EmptyIterator();
+        $this->filterFn = $filter;
+        $this->mapFn = $map;
     }
 
-    /**
-     * @param callable $filter
-     * @return self
-     */
-    public function filter($filter)
+    public function filter(callable $filter): self
     {
-        return new self($this->iterable, $filter, $this->map);
+        return new self($this->iterable, $filter, $this->mapFn);
     }
 
-    /**
-     * @param callable $map
-     * @return self
-     */
-    public function map($map)
+    public function map(callable $map): self
     {
-        return new self($this->iterable, $this->filter, $map);
+        return new self($this->iterable, $this->filterFn, $map);
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function getIterator()
+    public function getIterator(): Traversable
     {
         $iterable = $this->iterable;
-        if (null !== $this->filter) {
-            $iterable = iterable_filter($iterable, $this->filter);
+        if (null !== $this->filterFn) {
+            $iterable = iterable_filter($iterable, $this->filterFn);
         }
-        if (null !== $this->map) {
-            $iterable = iterable_map($iterable, $this->map);
+        if (null !== $this->mapFn) {
+            $iterable = iterable_map($iterable, $this->mapFn);
         }
         return iterable_to_traversable($iterable);
     }
 
-    /**
-     * @return array
-     */
-    public function asArray()
+    public function asArray(): array
     {
         $iterable = $this->iterable;
-        if (null !== $this->filter) {
-            $iterable = iterable_filter($iterable, $this->filter);
+        if (null !== $this->filterFn) {
+            $iterable = iterable_filter($iterable, $this->filterFn);
         }
-        if (null !== $this->map) {
-            $iterable = iterable_map($iterable, $this->map);
+        if (null !== $this->mapFn) {
+            $iterable = iterable_map($iterable, $this->mapFn);
         }
         return iterable_to_array($iterable);
     }

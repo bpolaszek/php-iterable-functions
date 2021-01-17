@@ -1,89 +1,61 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
+use function BenTools\IterableFunctions\iterable_to_array;
 
 final class IterableToArrayTest extends TestCase
 {
-
-    public function testFunctionExists()
+    public function testIteratorToArray(): void
     {
-        $this->assertTrue(function_exists('iterable_to_array'));
+        $iterator = new ArrayIterator(['foo', 'bar']);
+        $this->assertEquals(['foo', 'bar'], iterable_to_array($iterator));
     }
 
-    public function testIteratorToArray()
+    public function testIteratorWithoutKeysToArray(): void
     {
-        $iterator = new ArrayIterator(array('foo', 'bar'));
-        $this->assertEquals(array('foo', 'bar'), iterable_to_array($iterator));
+        $iterator = new ArrayIterator([1 => 'foo', 2 => 'bar']);
+        $this->assertEquals([0 => 'foo', 1 => 'bar'], iterable_to_array($iterator, false));
     }
 
-    public function testIteratorWithoutKeysToArray()
+    public function testArrayToArray(): void
     {
-        $iterator = new ArrayIterator(array(1 => 'foo', 2 => 'bar'));
-        $this->assertEquals(array(0 => 'foo', 1 => 'bar'), iterable_to_array($iterator, false));
+        $array = ['foo', 'bar'];
+        $this->assertEquals(['foo', 'bar'], iterable_to_array($array));
     }
 
-    public function testArrayToArray()
+    public function testArrayWithoutKeysToArray(): void
     {
-        $array = array('foo', 'bar');
-        $this->assertEquals(array('foo', 'bar'), iterable_to_array($array));
+        $array = [1 => 'foo', 2 => 'bar'];
+        $this->assertEquals([0 => 'foo', 1 => 'bar'], iterable_to_array($array, false));
     }
 
-    public function testArrayWithoutKeysToArray()
-    {
-        $array = array(1 => 'foo', 2 => 'bar');
-        $this->assertEquals(array(0 => 'foo', 1 => 'bar'), iterable_to_array($array, false));
-    }
-
-    public function testScalarToArray()
+    public function testScalarToArray(): void
     {
         $scalar = 'foobar';
         $this->assertTrue($this->triggersError($scalar));
     }
 
-    public function testObjectToArray()
+    public function testObjectToArray(): void
     {
         $object = new stdClass();
         $this->assertTrue($this->triggersError($object));
     }
 
-    public function testResourceToArray()
+    public function testResourceToArray(): void
     {
         $resource = fopen('php://temp', 'rb');
         $this->assertTrue($this->triggersError($resource));
     }
 
-    private function triggersError($input)
-    {
-        return version_compare(PHP_VERSION, '7.0.0') >= 0 ? $this->triggersErrorPHP7($input) : $this->triggersErrorPHP5($input);
-    }
-
-    private function triggersErrorPHP7($input)
+    private function triggersError($input): bool
     {
         $errorOccured = false;
 
         try {
             iterable_to_array($input);
-        }
-        catch (\TypeError $e) {
+        } catch (\TypeError $e) {
             $errorOccured = true;
         }
-
-        return $errorOccured;
-    }
-
-    private function triggersErrorPHP5($input)
-    {
-        $errorOccured = false;
-
-        set_error_handler(function ($errno) {
-            return E_RECOVERABLE_ERROR === $errno;
-        });
-
-        if (false === @iterable_to_array($input)) {
-            $errorOccured = true;
-        }
-
-        restore_error_handler();
 
         return $errorOccured;
     }

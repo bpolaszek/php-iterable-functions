@@ -1,10 +1,11 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
+use function BenTools\IterableFunctions\iterable_reduce;
 
 final class IterableReduceTest extends TestCase
 {
-    public function testArrayReduce()
+    public function testArrayReduce(): void
     {
         $iterable = array(1, 2);
         $reduce = static function ($carry, $item) {
@@ -13,7 +14,7 @@ final class IterableReduceTest extends TestCase
         self::assertSame(3, iterable_reduce($iterable, $reduce, 0));
     }
 
-    public function testTraversableReduce()
+    public function testTraversableReduce(): void
     {
         $iterable = SplFixedArray::fromArray(array(1, 2));
         $reduce = static function ($carry, $item) {
