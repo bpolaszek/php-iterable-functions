@@ -1,6 +1,8 @@
 <?php
 
-class TestIterableFilter extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+
+final class IterableFilterTest extends TestCase
 {
 
     public function testArrayFilter()
@@ -21,11 +23,10 @@ class TestIterableFilter extends \PHPUnit\Framework\TestCase
         $this->assertEquals(array(1 => 'bar'), iterable_to_array(iterable_filter($iterable, $filter)));
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testInvalidIterable()
     {
+        $this->expectException(InvalidArgumentException::class);
+
         $filter = function () {
             return true;
         };

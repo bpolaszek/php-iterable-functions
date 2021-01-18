@@ -15,11 +15,11 @@
         ]
     },
     "require": {
-        "php": ">=5.3"
+        "php": "^7.3 || ^8.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^4.0|^5.0|^6.0|^7.0",
+        "phpunit/phpunit": "^9",
         "squizlabs/php_codesniffer": "^2.0|^3.4",
-        "symfony/var-dumper": "@stable"
+        "symfony/var-dumper": "^5.2"
     }
 }

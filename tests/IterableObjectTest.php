@@ -1,6 +1,8 @@
 <?php
 
-class TestIterableObject extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+
+final class IterableObjectTest extends TestCase
 {
 
     /**

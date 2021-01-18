@@ -1,6 +1,8 @@
 <?php
 
-class TestIterableMap extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+
+final class IterableMapTest extends TestCase
 {
 
     public function testArrayMap()
@@ -17,11 +19,10 @@ class TestIterableMap extends \PHPUnit\Framework\TestCase
         $this->assertEquals(array('FOO', 'BAR'), iterable_to_array(iterable_map($iterable, $map)));
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testInvalidIterable()
     {
+        $this->expectException(InvalidArgumentException::class);
+
         $filter = function () {
             return true;
         };

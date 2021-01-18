@@ -2,7 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 
-class TestIterableToTraversable extends TestCase
+final class IterableToTraversableTest extends TestCase
 {
 
     public function testFunctionExists()
@@ -26,13 +26,11 @@ class TestIterableToTraversable extends TestCase
         $this->assertInstanceOf('Traversable', $traversable);
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testInvalidArgument()
     {
+        $this->expectException(InvalidArgumentException::class);
+
         $string = 'foo';
         iterable_to_traversable($string);
-        var_dump(iterable_to_traversable(array('foo', 'bar')));
     }
 }
