@@ -1,4 +1,5 @@
-/vendor
-
+/.phpcs-cache
 /composer.lock
+/phpcs.xml
 /phpunit.xml
+/vendor/

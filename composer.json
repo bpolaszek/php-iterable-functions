@@ -18,8 +18,8 @@
         "php": "^7.3 || ^8.0"
     },
     "require-dev": {
+        "doctrine/coding-standard": "^8.2",
         "phpunit/phpunit": "^9",
-        "squizlabs/php_codesniffer": "^2.0|^3.4",
         "symfony/var-dumper": "^5.2"
     },
     "config": {
