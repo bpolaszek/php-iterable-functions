@@ -28,36 +28,4 @@ final class IterableToArrayTest extends TestCase
         $array = [1 => 'foo', 2 => 'bar'];
         $this->assertEquals([0 => 'foo', 1 => 'bar'], iterable_to_array($array, false));
     }
-
-    public function testScalarToArray(): void
-    {
-        $scalar = 'foobar';
-        $this->assertTrue($this->triggersError($scalar));
-    }
-
-    public function testObjectToArray(): void
-    {
-        $object = new stdClass();
-        $this->assertTrue($this->triggersError($object));
-    }
-
-    public function testResourceToArray(): void
-    {
-        $resource = fopen('php://temp', 'rb');
-        $this->assertTrue($this->triggersError($resource));
-    }
-
-    private function triggersError($input): bool
-    {
-        $errorOccured = false;
-
-        try {
-            iterable_to_array($input);
-        } catch (\TypeError $e) {
-            $errorOccured = true;
-        }
-
-        return $errorOccured;
-    }
-
 }
