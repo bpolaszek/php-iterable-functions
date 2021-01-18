@@ -1,6 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
+namespace BenTools\IterableFunctions\Tests;
+
+use ArrayIterator;
 use PHPUnit\Framework\TestCase;
+use TypeError;
+
 use function BenTools\IterableFunctions\iterable_to_traversable;
 
 final class IterableToTraversableTest extends TestCase

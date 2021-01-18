@@ -1,6 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
+namespace BenTools\IterableFunctions\Tests;
+
 use PHPUnit\Framework\TestCase;
+use SplFixedArray;
+
 use function BenTools\IterableFunctions\iterable_map;
 use function BenTools\IterableFunctions\iterable_to_array;
 

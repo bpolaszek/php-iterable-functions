@@ -10,6 +10,9 @@
         "files": ["src/iterable-functions.php"]
     },
     "autoload-dev": {
+        "psr-4": {
+            "BenTools\\IterableFunctions\\Tests\\": "tests"
+        },
         "files": [
             "vendor/symfony/var-dumper/Resources/functions/dump.php"
         ]

@@ -1,58 +1,75 @@
 <?php
 
-use BenTools\IterableFunctions\IterableObject;
+declare(strict_types=1);
+
+namespace BenTools\IterableFunctions\Tests;
+
 use PHPUnit\Framework\TestCase;
+use SplFixedArray;
+
 use function BenTools\IterableFunctions\iterable;
+use function iterator_to_array;
 
 final class IterableObjectTest extends TestCase
 {
     /**
+     * @param array<mixed> $data
+     * @param array<mixed> $expectedResult
+     *
      * @dataProvider dataProvider
      */
-    public function testFromArrayToIterator($data, $filter = null, $map = null, $expectedResult): void
+    public function testFromArrayToIterator(array $data, ?callable $filter, ?string $map, array $expectedResult): void
     {
         $iterableObject = iterable($data, $filter, $map);
-        $this->assertInstanceOf(IterableObject::class, $iterableObject);
         $this->assertEquals($expectedResult, iterator_to_array($iterableObject));
     }
 
     /**
+     * @param array<mixed> $data
+     * @param array<mixed> $expectedResult
+     *
      * @dataProvider dataProvider
      */
-    public function testFromArrayToArray($data, $filter = null, $map = null, $expectedResult): void
+    public function testFromArrayToArray(array $data, ?callable $filter, ?string $map, array $expectedResult): void
     {
         $iterableObject = iterable($data, $filter, $map);
-        $this->assertInstanceOf(IterableObject::class, $iterableObject);
         $this->assertEquals($expectedResult, $iterableObject->asArray());
     }
 
     /**
+     * @param array<mixed> $data
+     * @param array<mixed> $expectedResult
+     *
      * @dataProvider dataProvider
      */
-    public function testFromTraversableToIterator($data, $filter = null, $map = null, $expectedResult): void
+    public function testFromTraversableToIterator(array $data, ?callable $filter, ?string $map, array $expectedResult): void
     {
         $data = SplFixedArray::fromArray($data);
         $iterableObject = iterable($data, $filter, $map);
-        $this->assertInstanceOf(IterableObject::class, $iterableObject);
         $this->assertEquals($expectedResult, iterator_to_array($iterableObject));
     }
 
     /**
+     * @param array<mixed> $data
+     * @param array<mixed> $expectedResult
+     *
      * @dataProvider dataProvider
      */
-    public function testFromTraversableToArray($data, $filter = null, $map = null, $expectedResult): void
+    public function testFromTraversableToArray(array $data, ?callable $filter, ?string $map, array $expectedResult): void
     {
         $data = SplFixedArray::fromArray($data);
         $iterableObject = iterable($data, $filter, $map);
-        $this->assertInstanceOf(IterableObject::class, $iterableObject);
         $this->assertEquals($expectedResult, $iterableObject->asArray());
     }
 
-    public function dataProvider()
+    /**
+     * @return list<array{array<mixed>, callable|null, string|null, array<mixed>}>>
+     */
+    public function dataProvider(): array
     {
         $data = ['foo', 'bar'];
         $filter = static function ($value) {
-            return 'bar' === $value;
+            return $value === 'bar';
         };
         $map = 'strtoupper';
 
@@ -83,5 +100,4 @@ final class IterableObjectTest extends TestCase
             ],
         ];
     }
-
 }
