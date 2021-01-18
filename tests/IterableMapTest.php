@@ -1,31 +1,22 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
+use function BenTools\IterableFunctions\iterable_map;
+use function BenTools\IterableFunctions\iterable_to_array;
 
 final class IterableMapTest extends TestCase
 {
-
-    public function testArrayMap()
+    public function testArrayMap(): void
     {
-        $iterable = array('foo', 'bar');
+        $iterable = ['foo', 'bar'];
         $map = 'strtoupper';
-        $this->assertEquals(array('FOO', 'BAR'), iterable_to_array(iterable_map($iterable, $map)));
+        $this->assertEquals(['FOO', 'BAR'], iterable_to_array(iterable_map($iterable, $map)));
     }
 
-    public function testTraversableMap()
+    public function testTraversableMap(): void
     {
-        $iterable = SplFixedArray::fromArray(array('foo', 'bar'));
+        $iterable = SplFixedArray::fromArray(['foo', 'bar']);
         $map = 'strtoupper';
-        $this->assertEquals(array('FOO', 'BAR'), iterable_to_array(iterable_map($iterable, $map)));
-    }
-
-    public function testInvalidIterable()
-    {
-        $this->expectException(InvalidArgumentException::class);
-
-        $filter = function () {
-            return true;
-        };
-        iterable_map('foo', $filter);
+        $this->assertEquals(['FOO', 'BAR'], iterable_to_array(iterable_map($iterable, $map)));
     }
 }

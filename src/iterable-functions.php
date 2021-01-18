@@ -1,174 +1,108 @@
 <?php
 
-use BenTools\IterableFunctions\IterableObject;
+namespace BenTools\IterableFunctions;
 
-if (!function_exists('iterable_map')) {
 
-    /**
-     * Maps a callable to an iterable.
-     *
-     * @param iterable|array|\Traversable $iterable
-     * @param callable                    $map
-     * @return array|ArrayIterator
-     * @throws InvalidArgumentException
-     */
-    function iterable_map($iterable, $map)
-    {
-        if (!is_iterable($iterable)) {
-            throw new \InvalidArgumentException(
-                sprintf('Expected array or Traversable, got %s', is_object($iterable) ? get_class($iterable) : gettype($iterable))
-            );
-        }
+use ArrayIterator;
+use CallbackFilterIterator;
+use IteratorIterator;
+use Traversable;
 
-        // Cannot rely on callable type-hint on PHP 5.3
-        if (null !== $map && !is_callable($map) && !$map instanceof Closure) {
-            throw new InvalidArgumentException(
-                sprintf('Expected callable, got %s', is_object($map) ? get_class($map) : gettype($map))
-            );
-        }
-
-        if ($iterable instanceof Traversable) {
-            return new ArrayIterator(array_map($map, iterator_to_array($iterable)));
-        }
-
-        return array_map($map, $iterable);
+/**
+ * Maps a callable to an iterable.
+ *
+ * @param array|Traversable $iterable
+ * @return array|ArrayIterator
+ */
+function iterable_map(iterable $iterable, callable $map): iterable
+{
+    if ($iterable instanceof Traversable) {
+        return new ArrayIterator(array_map($map, iterator_to_array($iterable)));
     }
 
+    return array_map($map, $iterable);
 }
 
 
-if (!function_exists('is_iterable')) {
-
-    /**
-     * Check wether or not a variable is iterable (i.e array or \Traversable)
-     *
-     * @param  mixed $iterable
-     * @return bool
-     */
-    function is_iterable($iterable)
-    {
-        return is_array($iterable) || $iterable instanceof \Traversable;
-    }
-}
-
-if (!function_exists('iterable_to_array')) {
-
-    /**
-     * Copy the iterable into an array. If the iterable is already an array, return it.
-     *
-     * @param  iterable|array|\Traversable $iterable
-     * @param  bool                        $use_keys [optional] Whether to use the iterator element keys as index.
-     * @return array
-     */
-    function iterable_to_array($iterable, $use_keys = true)
-    {
-        return is_array($iterable) ? ($use_keys ? $iterable : array_values($iterable)) : iterator_to_array($iterable, $use_keys);
-    }
-}
-
-if (!function_exists('iterable_to_traversable')) {
-
-    /**
-     * If the iterable is not intance of \Traversable, it is an array => convert it to an ArrayIterator.
-     *
-     * @param  iterable|array|\Traversable $iterable
-     * @return \Traversable
-     */
-    function iterable_to_traversable($iterable)
-    {
-        if ($iterable instanceof Traversable) {
-            return $iterable;
-        } elseif (is_array($iterable)) {
-            return new ArrayIterator($iterable);
-        } else {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    'Expected array or \\Traversable, got %s',
-                    is_object($iterable) ? get_class($iterable) : gettype($iterable)
-                )
-            );
-        }
-    }
-}
-
-if (!function_exists('iterable_filter')) {
-
-    /**
-     * Filters an iterable.
-     *
-     * @param iterable|array|\Traversable $iterable
-     * @param callable                    $filter
-     * @return array|CallbackFilterIterator
-     * @throws InvalidArgumentException
-     */
-    function iterable_filter($iterable, $filter = null)
-    {
-        if (!is_iterable($iterable)) {
-            throw new \InvalidArgumentException(
-                sprintf('Expected array or Traversable, got %s', is_object($iterable) ? get_class($iterable) : gettype($iterable))
-            );
-        }
-
-        // Cannot rely on callable type-hint on PHP 5.3
-        if (null !== $filter && !is_callable($filter) && !$filter instanceof Closure) {
-            throw new InvalidArgumentException(
-                sprintf('Expected callable, got %s', is_object($filter) ? get_class($filter) : gettype($filter))
-            );
-        }
-
-        if (null === $filter) {
-            $filter = function ($value) {
-                return (bool) $value;
-            };
-        }
-
-        if ($iterable instanceof Traversable) {
-            if (!class_exists('CallbackFilterIterator')) {
-                throw new \RuntimeException('Class CallbackFilterIterator not found. Try using a polyfill, like symfony/polyfill-php54');
-            }
-            return new CallbackFilterIterator(new IteratorIterator($iterable), $filter);
-        }
-
-        return array_filter($iterable, $filter);
+/**
+ * Copy the iterable into an array. If the iterable is already an array, return it.
+ *
+ * @param array|Traversable $iterable
+ * @param bool $use_keys [optional] Whether to use the iterator element keys as index.
+ * @return array
+ */
+function iterable_to_array(iterable $iterable, bool $use_keys = true): array
+{
+    if ($iterable instanceof Traversable) {
+        return iterator_to_array($iterable, $use_keys);
     }
 
-}
-
-if (!function_exists('iterable_reduce')) {
-    /**
-     * Reduces an iterable.
-     *
-     * @param iterable<mixed> $iterable
-     * @param callable(mixed, mixed) $reduce
-     * @return mixed
-     *
-     * @psalm-template TValue
-     * @psalm-template TResult
-     *
-     * @psalm-param iterable<TValue> $iterable
-     * @psalm-param callable(TResult|null, TValue) $reduce
-     * @psalm-param TResult|null $initial
-     *
-     * @psalm-return TResult|null
-     */
-    function iterable_reduce($iterable, $reduce, $initial = null)
-    {
-        foreach ($iterable as $item) {
-            $initial = $reduce($initial, $item);
-        }
-
-        return $initial;
-    }
+    return $use_keys ? $iterable : array_values($iterable);
 }
 
 /**
- * @param iterable|array|\Traversable $iterable
- * @param callable|null               $filter
- * @param callable|null               $map
- * @return Traversable|IterableObject
- * @throws InvalidArgumentException
+ * If the iterable is not intance of Traversable, it is an array => convert it to an ArrayIterator.
+ *
+ * @param array|Traversable $iterable
  */
-function iterable($iterable, $filter = null, $map = null)
+function iterable_to_traversable(iterable $iterable): Traversable
+{
+    if ($iterable instanceof Traversable) {
+        return $iterable;
+    }
+
+    return new ArrayIterator($iterable);
+}
+
+
+/**
+ * Filters an iterable.
+ *
+ * @param array|Traversable $iterable
+ * @return array|CallbackFilterIterator
+ */
+function iterable_filter(iterable $iterable, ?callable $filter = null)
+{
+    if (null === $filter) {
+        $filter = static function ($value) {
+            return (bool) $value;
+        };
+    }
+
+    if ($iterable instanceof Traversable) {
+        return new CallbackFilterIterator(new IteratorIterator($iterable), $filter);
+    }
+
+    return array_filter($iterable, $filter);
+}
+
+
+/**
+ * Reduces an iterable.
+ *
+ * @param iterable<mixed> $iterable
+ * @param callable(mixed, mixed) $reduce
+ * @return mixed
+ *
+ * @psalm-template TValue
+ * @psalm-template TResult
+ *
+ * @psalm-param iterable<TValue> $iterable
+ * @psalm-param callable(TResult|null, TValue) $reduce
+ * @psalm-param TResult|null $initial
+ *
+ * @psalm-return TResult|null
+ */
+function iterable_reduce(iterable $iterable, callable $reduce, $initial = null)
+{
+    foreach ($iterable as $item) {
+        $initial = $reduce($initial, $item);
+    }
+
+    return $initial;
+}
+
+function iterable(iterable $iterable, ?callable $filter = null, ?callable $map = null): IterableObject
 {
     return new IterableObject($iterable, $filter, $map);
 }

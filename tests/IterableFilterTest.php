@@ -1,35 +1,26 @@
 <?php
 
 use PHPUnit\Framework\TestCase;
+use function BenTools\IterableFunctions\iterable_filter;
+use function BenTools\IterableFunctions\iterable_to_array;
 
 final class IterableFilterTest extends TestCase
 {
-
-    public function testArrayFilter()
+    public function testArrayFilter(): void
     {
-        $iterable = array('foo', 'bar');
-        $filter = function ($input) {
+        $iterable = ['foo', 'bar'];
+        $filter = static function ($input) {
             return 'bar' === $input;
         };
-        $this->assertEquals(array(1 => 'bar'), iterable_to_array(iterable_filter($iterable, $filter)));
+        $this->assertEquals([1 => 'bar'], iterable_to_array(iterable_filter($iterable, $filter)));
     }
 
-    public function testTraversableFilter()
+    public function testTraversableFilter(): void
     {
-        $iterable = SplFixedArray::fromArray(array('foo', 'bar'));
-        $filter = function ($input) {
+        $iterable = SplFixedArray::fromArray(['foo', 'bar']);
+        $filter = static function ($input) {
             return 'bar' === $input;
         };
-        $this->assertEquals(array(1 => 'bar'), iterable_to_array(iterable_filter($iterable, $filter)));
-    }
-
-    public function testInvalidIterable()
-    {
-        $this->expectException(InvalidArgumentException::class);
-
-        $filter = function () {
-            return true;
-        };
-        iterable_filter('foo', $filter);
+        $this->assertEquals([1 => 'bar'], iterable_to_array(iterable_filter($iterable, $filter)));
     }
 }
