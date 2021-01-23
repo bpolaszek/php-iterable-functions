@@ -187,7 +187,7 @@ require_once '/path/to/this/library/src/iterable-functions.php';
 Unit tests
 ==========
 ```
-./vendor/bin/phpunit
+php vendor/bin/pest
 ```
 
 [CodeCov Master]: https://codecov.io/gh/bpolaszek/php-iterable-functions/branch/2.0.x-dev
