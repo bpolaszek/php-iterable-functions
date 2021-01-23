@@ -17,6 +17,7 @@
 
         <exclude name="Generic.Formatting.MultipleStatementAlignment"/>
         <exclude name="Squiz.Commenting.FunctionComment.SpacingAfterParamType"/>
+        <exclude name="SlevomatCodingStandard.Functions.StaticClosure"/>
     </rule>
 
     <file>src/</file>
