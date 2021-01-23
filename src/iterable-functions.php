@@ -1,18 +1,25 @@
 <?php
 
-namespace BenTools\IterableFunctions;
+declare(strict_types=1);
 
+namespace BenTools\IterableFunctions;
 
 use ArrayIterator;
 use CallbackFilterIterator;
 use IteratorIterator;
 use Traversable;
 
+use function array_filter;
+use function array_map;
+use function array_values;
+use function iterator_to_array;
+
 /**
  * Maps a callable to an iterable.
  *
- * @param array|Traversable $iterable
- * @return array|ArrayIterator
+ * @param iterable<mixed> $iterable
+ *
+ * @return iterable<mixed>
  */
 function iterable_map(iterable $iterable, callable $map): iterable
 {
@@ -23,27 +30,29 @@ function iterable_map(iterable $iterable, callable $map): iterable
     return array_map($map, $iterable);
 }
 
-
 /**
  * Copy the iterable into an array. If the iterable is already an array, return it.
  *
- * @param array|Traversable $iterable
- * @param bool $use_keys [optional] Whether to use the iterator element keys as index.
- * @return array
+ * @param iterable<mixed> $iterable
+ * @param bool $preserveKeys [optional] Whether to use the iterator element keys as index.
+ *
+ * @return array<mixed>
  */
-function iterable_to_array(iterable $iterable, bool $use_keys = true): array
+function iterable_to_array(iterable $iterable, bool $preserveKeys = true): array
 {
     if ($iterable instanceof Traversable) {
-        return iterator_to_array($iterable, $use_keys);
+        return iterator_to_array($iterable, $preserveKeys);
     }
 
-    return $use_keys ? $iterable : array_values($iterable);
+    return $preserveKeys ? $iterable : array_values($iterable);
 }
 
 /**
- * If the iterable is not intance of Traversable, it is an array => convert it to an ArrayIterator.
+ * If the iterable is not instance of Traversable, it is an array => convert it to an ArrayIterator.
  *
- * @param array|Traversable $iterable
+ * @param iterable<mixed> $iterable
+ *
+ * @return Traversable<mixed>
  */
 function iterable_to_traversable(iterable $iterable): Traversable
 {
@@ -54,16 +63,16 @@ function iterable_to_traversable(iterable $iterable): Traversable
     return new ArrayIterator($iterable);
 }
 
-
 /**
  * Filters an iterable.
  *
- * @param array|Traversable $iterable
- * @return array|CallbackFilterIterator
+ * @param iterable<mixed> $iterable
+ *
+ * @return array<mixed>|CallbackFilterIterator
  */
 function iterable_filter(iterable $iterable, ?callable $filter = null)
 {
-    if (null === $filter) {
+    if ($filter === null) {
         $filter = static function ($value) {
             return (bool) $value;
         };
@@ -76,21 +85,19 @@ function iterable_filter(iterable $iterable, ?callable $filter = null)
     return array_filter($iterable, $filter);
 }
 
-
 /**
  * Reduces an iterable.
  *
  * @param iterable<mixed> $iterable
  * @param callable(mixed, mixed) $reduce
+ *
  * @return mixed
  *
  * @psalm-template TValue
  * @psalm-template TResult
- *
  * @psalm-param iterable<TValue> $iterable
  * @psalm-param callable(TResult|null, TValue) $reduce
  * @psalm-param TResult|null $initial
- *
  * @psalm-return TResult|null
  */
 function iterable_reduce(iterable $iterable, callable $reduce, $initial = null)
@@ -102,6 +109,9 @@ function iterable_reduce(iterable $iterable, callable $reduce, $initial = null)
     return $initial;
 }
 
+/**
+ * @param iterable<mixed> $iterable
+ */
 function iterable(iterable $iterable, ?callable $filter = null, ?callable $map = null): IterableObject
 {
     return new IterableObject($iterable, $filter, $map);

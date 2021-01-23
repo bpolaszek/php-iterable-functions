@@ -1,13 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
+namespace BenTools\IterableFunctions\Tests;
+
 use PHPUnit\Framework\TestCase;
+use SplFixedArray;
+
 use function BenTools\IterableFunctions\iterable_reduce;
 
 final class IterableReduceTest extends TestCase
 {
     public function testArrayReduce(): void
     {
-        $iterable = array(1, 2);
+        $iterable = [1, 2];
         $reduce = static function ($carry, $item) {
             return $carry + $item;
         };
@@ -16,7 +22,7 @@ final class IterableReduceTest extends TestCase
 
     public function testTraversableReduce(): void
     {
-        $iterable = SplFixedArray::fromArray(array(1, 2));
+        $iterable = SplFixedArray::fromArray([1, 2]);
         $reduce = static function ($carry, $item) {
             return $carry + $item;
         };
