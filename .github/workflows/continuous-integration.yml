@@ -7,8 +7,8 @@ on:
     - cron: "0 0 1 * *"
 
 jobs:
-  phpunit:
-    name: "PHPUnit"
+  unit-tests:
+    name: "Unit Tests"
     runs-on: "ubuntu-20.04"
 
     strategy:
@@ -41,20 +41,20 @@ jobs:
         with:
           dependency-versions: "${{ matrix.dependencies }}"
 
-      - name: "Run PHPUnit"
-        run: "vendor/bin/phpunit --coverage-clover=coverage.xml"
+      - name: "Run unit tests"
+        run: "vendor/bin/pest --coverage-clover=coverage.xml"
 
       - name: "Upload coverage file"
         uses: "actions/upload-artifact@v2"
         with:
-          name: "phpunit-${{ matrix.deps }}-${{ matrix.php-version }}.coverage"
+          name: "pest-${{ matrix.deps }}-${{ matrix.php-version }}.coverage"
           path: "coverage.xml"
 
-  upload_coverage:
+  upload-coverage:
     name: "Upload coverage to Codecov"
     runs-on: "ubuntu-20.04"
     needs:
-      - "phpunit"
+      - "unit-tests"
 
     steps:
       - name: "Checkout"

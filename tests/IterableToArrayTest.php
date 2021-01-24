@@ -5,33 +5,28 @@ declare(strict_types=1);
 namespace BenTools\IterableFunctions\Tests;
 
 use ArrayIterator;
-use PHPUnit\Framework\TestCase;
 
 use function BenTools\IterableFunctions\iterable_to_array;
+use function it;
+use function PHPUnit\Framework\assertEquals;
+use function PHPUnit\Framework\assertSame;
 
-final class IterableToArrayTest extends TestCase
-{
-    public function testIteratorToArray(): void
-    {
-        $iterator = new ArrayIterator(['foo', 'bar']);
-        $this->assertEquals(['foo', 'bar'], iterable_to_array($iterator));
-    }
+it('converts an iterator to an array', function (): void {
+    $iterator = new ArrayIterator(['foo', 'bar']);
+    assertEquals(['foo', 'bar'], iterable_to_array($iterator));
+});
 
-    public function testIteratorWithoutKeysToArray(): void
-    {
-        $iterator = new ArrayIterator([1 => 'foo', 2 => 'bar']);
-        $this->assertEquals([0 => 'foo', 1 => 'bar'], iterable_to_array($iterator, false));
-    }
+it('converts an iterator to an array, without keys', function (): void {
+    $iterator = new ArrayIterator([1 => 'foo', 2 => 'bar']);
+    assertEquals([0 => 'foo', 1 => 'bar'], iterable_to_array($iterator, false));
+});
 
-    public function testArrayToArray(): void
-    {
-        $array = ['foo', 'bar'];
-        $this->assertEquals(['foo', 'bar'], iterable_to_array($array));
-    }
+it('keeps the same array', function (): void {
+    $array = ['foo', 'bar'];
+    assertSame(['foo', 'bar'], iterable_to_array($array));
+});
 
-    public function testArrayWithoutKeysToArray(): void
-    {
-        $array = [1 => 'foo', 2 => 'bar'];
-        $this->assertEquals([0 => 'foo', 1 => 'bar'], iterable_to_array($array, false));
-    }
-}
+it('removes the keys of an array', function (): void {
+     $array = [1 => 'foo', 2 => 'bar'];
+     assertEquals([0 => 'foo', 1 => 'bar'], iterable_to_array($array, false));
+});

@@ -22,7 +22,7 @@
     },
     "require-dev": {
         "doctrine/coding-standard": "^8.2",
-        "phpunit/phpunit": "^9",
+        "pestphp/pest": "^1.0",
         "symfony/var-dumper": "^5.2"
     },
     "config": {

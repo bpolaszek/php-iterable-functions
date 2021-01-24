@@ -5,32 +5,20 @@ declare(strict_types=1);
 namespace BenTools\IterableFunctions\Tests;
 
 use ArrayIterator;
-use PHPUnit\Framework\TestCase;
-use TypeError;
 
 use function BenTools\IterableFunctions\iterable_to_traversable;
+use function it;
+use function PHPUnit\Framework\assertEquals;
+use function PHPUnit\Framework\assertSame;
 
-final class IterableToTraversableTest extends TestCase
-{
-    public function testIteratorToTraversable(): void
-    {
-        $iterator = new ArrayIterator(['foo' => 'bar']);
-        $traversable = iterable_to_traversable($iterator);
-        $this->assertSame($iterator, $traversable);
-    }
+it('keeps the same traversable object', function (): void {
+    $iterator = new ArrayIterator(['foo' => 'bar']);
+    $traversable = iterable_to_traversable($iterator);
+    assertSame($iterator, $traversable);
+});
 
-    public function testArrayToTraversable(): void
-    {
-        $array = ['foo' => 'bar'];
-        $traversable = iterable_to_traversable($array);
-        $this->assertEquals(new ArrayIterator(['foo' => 'bar']), $traversable);
-    }
-
-    public function testInvalidArgument(): void
-    {
-        $this->expectException(TypeError::class);
-
-        $string = 'foo';
-        iterable_to_traversable($string);
-    }
-}
+it('converts an array to a traversable object', function (): void {
+    $array = ['foo' => 'bar'];
+    $traversable = iterable_to_traversable($array);
+    assertEquals(new ArrayIterator(['foo' => 'bar']), $traversable);
+});
