@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace BenTools\IterableFunctions\Tests;
 
 use BenTools\IterableFunctions\IterableObject;
+use Generator;
 use SplFixedArray;
 
 use function BenTools\IterableFunctions\iterable;
@@ -14,9 +15,9 @@ use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertInstanceOf;
 use function test;
 
-$dataProvider = function () {
+$dataProvider = static function (): Generator {
     $data = ['foo', 'bar'];
-    $filter = static function ($value) {
+    $filter = static function ($value): bool {
         return $value === 'bar';
     };
     $map = 'strtoupper';
@@ -72,7 +73,7 @@ test('input: traversable | output: array', function ($data, $filter, $map, $expe
 })->with($dataProvider());
 
 it('filters the subject', function (): void {
-    $filter = static function ($value) {
+    $filter = static function ($value): bool {
         return $value === 'bar';
     };
     $iterableObject = iterable(['foo', 'bar'])->filter($filter);
@@ -87,7 +88,7 @@ it('maps the subject', function (): void {
 });
 
 it('combines filter and map', function (): void {
-    $filter = static function ($value) {
+    $filter = static function ($value): bool {
         return $value === 'bar';
     };
     $map = 'strtoupper';

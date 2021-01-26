@@ -10,16 +10,18 @@ use Traversable;
 
 /**
  * @internal
+ *
+ * @implements IteratorAggregate<mixed>
  */
 final class IterableObject implements IteratorAggregate
 {
     /** @var iterable<mixed> */
     private $iterable;
 
-    /** @var callable */
+    /** @var callable|null */
     private $filterFn;
 
-    /** @var callable */
+    /** @var callable|null */
     private $mapFn;
 
     /**

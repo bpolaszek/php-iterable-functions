@@ -73,7 +73,7 @@ function iterable_to_traversable(iterable $iterable): Traversable
 function iterable_filter(iterable $iterable, ?callable $filter = null)
 {
     if ($filter === null) {
-        $filter = static function ($value) {
+        $filter = static function ($value): bool {
             return (bool) $value;
         };
     }
@@ -89,14 +89,14 @@ function iterable_filter(iterable $iterable, ?callable $filter = null)
  * Reduces an iterable.
  *
  * @param iterable<mixed> $iterable
- * @param callable(mixed, mixed) $reduce
+ * @param callable(mixed, mixed):mixed $reduce
  *
  * @return mixed
  *
  * @psalm-template TValue
- * @psalm-template TResult
+ * @template TResult
  * @psalm-param iterable<TValue> $iterable
- * @psalm-param callable(TResult|null, TValue) $reduce
+ * @psalm-param callable(TResult|null, TValue):TResult $reduce
  * @psalm-param TResult|null $initial
  * @psalm-return TResult|null
  */
