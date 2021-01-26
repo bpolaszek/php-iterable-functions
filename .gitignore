@@ -3,5 +3,6 @@
 /composer.lock
 /phpcs.xml
 /phpstan.neon
+/psalm.xml
 /phpunit.xml
 /vendor/

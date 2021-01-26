@@ -73,9 +73,11 @@ function iterable_to_traversable(iterable $iterable): Traversable
 function iterable_filter(iterable $iterable, ?callable $filter = null)
 {
     if ($filter === null) {
-        $filter = static function ($value): bool {
-            return (bool) $value;
-        };
+        $filter =
+            /** @param mixed $value */
+            static function ($value): bool {
+                return (bool) $value;
+            };
     }
 
     if ($iterable instanceof Traversable) {

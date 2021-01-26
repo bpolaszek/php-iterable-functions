@@ -26,7 +26,8 @@
         "phpstan/extension-installer": "^1.1",
         "phpstan/phpstan": "^0.12.67",
         "phpstan/phpstan-strict-rules": "^0.12.9",
-        "symfony/var-dumper": "^5.2"
+        "symfony/var-dumper": "^5.2",
+        "vimeo/psalm": "^4.4"
     },
     "config": {
         "sort-packages": true
