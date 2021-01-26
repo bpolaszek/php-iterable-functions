@@ -35,13 +35,13 @@ If your variable is already an instance of `Traversable` (i.e. an `Iterator`, an
 If your variable is an array, the function converts it to an `ArrayIterator`.
 
 Usage:
+
 ```php
 use function BenTools\IterableFunctions\iterable_to_traversable;
 
 var_dump(iterable_to_traversable(['foo', 'bar'])); // \ArrayIterator(['foo', 'bar'])
 var_dump(iterable_to_traversable(new \ArrayIterator(['foo', 'bar']))); // \ArrayIterator(['foo', 'bar'])
 ```
-
 
 iterable_map()
 --------------
@@ -102,6 +102,7 @@ foreach (iterable_filter($generator()) as $item) {
 ```
 
 Of course you can define your own filter:
+
 ```php
 use function BenTools\IterableFunctions\iterable_filter;
 
@@ -126,6 +127,7 @@ Iterable fluent interface
 The `iterable` function allows you to wrap an iterable and apply some common operations.
 
 With an array input:
+
 ```php
 use function BenTools\IterableFunctions\iterable;
 $data = [
@@ -138,6 +140,7 @@ $iterable = iterable($data)->filter(fn($eatable) => 'rock' !== $eatable)->map('s
 ```
 
 With a traversable input:
+
 ```php
 use function BenTools\IterableFunctions\iterable;
 $data = [
@@ -152,20 +155,22 @@ $iterable = iterable($data())->filter(fn($eatable) => 'rock' !== $eatable)->map(
 ```
 
 Array output:
+
 ```php
 $iterable->asArray(); // array ['banana', 'pineapple']
 ```
-
 
 Installation
 ============
 
 With composer (they'll be autoloaded):
+
 ```
 composer require bentools/iterable-functions
 ```
 
 Or manually:
+
 ```php
 require_once '/path/to/this/library/src/iterable-functions.php';
 ```
