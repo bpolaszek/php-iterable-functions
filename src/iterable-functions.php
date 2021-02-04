@@ -115,7 +115,12 @@ function iterable_reduce(iterable $iterable, callable $reduce, $initial = null)
 }
 
 /**
- * @param iterable<mixed> $iterable
+ * @param iterable<TKey, TValue>|null $iterable
+ *
+ * @return IterableObject<TKey, TValue>
+ *
+ * @template TKey
+ * @template TValue
  */
 function iterable(?iterable $iterable): IterableObject
 {
