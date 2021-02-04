@@ -10,7 +10,6 @@ use IteratorIterator;
 use Traversable;
 
 use function array_filter;
-use function array_map;
 use function array_values;
 use function iterator_to_array;
 
@@ -23,11 +22,9 @@ use function iterator_to_array;
  */
 function iterable_map(iterable $iterable, callable $map): iterable
 {
-    if ($iterable instanceof Traversable) {
-        return new ArrayIterator(array_map($map, iterator_to_array($iterable)));
+    foreach ($iterable as $key => $item) {
+        yield $key => $map($item);
     }
-
-    return array_map($map, $iterable);
 }
 
 /**
