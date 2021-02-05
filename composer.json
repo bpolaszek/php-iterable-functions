@@ -21,6 +21,7 @@
         "php": "^7.3 || ^8.0"
     },
     "require-dev": {
+        "bentools/cartesian-product": "^1.3",
         "doctrine/coding-standard": "^8.2",
         "pestphp/pest": "^1.0",
         "phpstan/extension-installer": "^1.1",

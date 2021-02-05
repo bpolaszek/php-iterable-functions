@@ -5,12 +5,11 @@ declare(strict_types=1);
 namespace BenTools\IterableFunctions;
 
 use ArrayIterator;
-use CallbackFilterIterator;
-use IteratorIterator;
+use EmptyIterator;
 use Traversable;
 
-use function array_filter;
 use function array_values;
+use function is_array;
 use function iterator_to_array;
 
 /**
@@ -22,9 +21,9 @@ use function iterator_to_array;
  */
 function iterable_map(iterable $iterable, callable $map): iterable
 {
-    foreach ($iterable as $key => $item) {
-        yield $key => $map($item);
-    }
+    $mapped = iterable($iterable)->map($map);
+
+    return is_array($iterable) ? $mapped->asArray() : $mapped;
 }
 
 /**
@@ -65,23 +64,13 @@ function iterable_to_traversable(iterable $iterable): Traversable
  *
  * @param iterable<mixed> $iterable
  *
- * @return array<mixed>|CallbackFilterIterator
+ * @return iterable<mixed>
  */
-function iterable_filter(iterable $iterable, ?callable $filter = null)
+function iterable_filter(iterable $iterable, ?callable $filter = null): iterable
 {
-    if ($filter === null) {
-        $filter =
-            /** @param mixed $value */
-            static function ($value): bool {
-                return (bool) $value;
-            };
-    }
+    $filtered = iterable($iterable)->filter($filter);
 
-    if ($iterable instanceof Traversable) {
-        return new CallbackFilterIterator(new IteratorIterator($iterable), $filter);
-    }
-
-    return array_filter($iterable, $filter);
+    return is_array($iterable) ? $filtered->asArray() : $filtered;
 }
 
 /**
@@ -111,7 +100,7 @@ function iterable_reduce(iterable $iterable, callable $reduce, $initial = null)
 /**
  * @param iterable<mixed> $iterable
  */
-function iterable(iterable $iterable): IterableObject
+function iterable(?iterable $iterable): IterableObject
 {
-    return IterableObject::new($iterable);
+    return new IterableObject($iterable ?? new EmptyIterator());
 }
