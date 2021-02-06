@@ -70,9 +70,14 @@ function iterable_to_traversable(iterable $iterable): Traversable
 /**
  * Filters an iterable.
  *
- * @param iterable<mixed> $iterable
+ * @param (callable(TValue):bool)|null $filter
  *
- * @return iterable<mixed>
+ * @psalm-param iterable<TKey, TValue> $iterable
+ * @phpstan-param iterable<array-key, TValue> $iterable https://github.com/phpstan/phpstan/issues/4498
+ * @psalm-return iterable<TKey, TValue>
+ * @phpstan-return iterable<array-key, TValue> https://github.com/phpstan/phpstan/issues/4498
+ * @template TKey
+ * @template TValue
  */
 function iterable_filter(iterable $iterable, ?callable $filter = null): iterable
 {
