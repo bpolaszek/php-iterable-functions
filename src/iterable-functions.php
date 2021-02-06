@@ -15,13 +15,18 @@ use function iterator_to_array;
 /**
  * Maps a callable to an iterable.
  *
- * @param iterable<mixed> $iterable
+ * @param iterable<TKey, TValue> $iterable
+ * @param callable(TValue):TResult $mapper
  *
- * @return iterable<mixed>
+ * @return iterable<TKey, TResult>
+ *
+ * @template TKey
+ * @template TValue
+ * @template TResult
  */
-function iterable_map(iterable $iterable, callable $map): iterable
+function iterable_map(iterable $iterable, callable $mapper): iterable
 {
-    $mapped = iterable($iterable)->map($map);
+    $mapped = iterable($iterable)->map($mapper);
 
     return is_array($iterable) ? $mapped->asArray() : $mapped;
 }
