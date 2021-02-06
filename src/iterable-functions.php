@@ -28,12 +28,17 @@ function iterable_map(iterable $iterable, callable $map): iterable
 }
 
 /**
- * Copy the iterable into an array. If the iterable is already an array, return it.
+ * Copy the iterable into an array.
  *
- * @param iterable<mixed> $iterable
+ * @param iterable<array-key, TValue> $iterable
  * @param bool $preserveKeys [optional] Whether to use the iterator element keys as index.
  *
- * @return array<mixed>
+ * @return array<array-key, TValue>
+ *
+ * @psalm-return ($preserveKeys is true ? array<TKey, TValue> : array<int, TValue>)
+ * @psalm-template TKey as array-key
+ * @phpstan-template TKey
+ * @template TValue
  */
 function iterable_to_array(iterable $iterable, bool $preserveKeys = true): array
 {
