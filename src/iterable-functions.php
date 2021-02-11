@@ -84,17 +84,16 @@ function iterable_filter(iterable $iterable, ?callable $filter = null): iterable
 /**
  * Reduces an iterable.
  *
- * @param iterable<mixed> $iterable
- * @param callable(mixed, mixed):mixed $reduce
+ * @param iterable<TValue> $iterable
+ * @param callable(TResult|null, TValue):TResult $reduce
+ * @param TResult|null $initial
  *
- * @return mixed
+ * @return TResult|null
  *
- * @psalm-template TValue
+ * @template TValue
  * @template TResult
- * @psalm-param iterable<TValue> $iterable
- * @psalm-param callable(TResult|null, TValue):TResult $reduce
- * @psalm-param TResult|null $initial
- * @psalm-return TResult|null
+ * @phpcsSuppress SlevomatCodingStandard.TypeHints.ParameterTypeHint.MissingNativeTypeHint
+ * @phpcsSuppress SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint
  */
 function iterable_reduce(iterable $iterable, callable $reduce, $initial = null)
 {
