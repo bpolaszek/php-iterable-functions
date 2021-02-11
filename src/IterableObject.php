@@ -27,15 +27,27 @@ final class IterableObject implements IteratorAggregate
     /**
      * @param iterable<mixed>|null $iterable
      */
-    public function __construct(?iterable $iterable = null, ?callable $filter = null, ?callable $map = null)
+    private function __construct(?iterable $iterable = null, ?callable $filter = null, ?callable $map = null)
     {
         $this->iterable = $iterable ?? new EmptyIterator();
         $this->filterFn = $filter;
         $this->mapFn = $map;
     }
 
-    public function filter(callable $filter): self
+    /**
+     * @param iterable<mixed>|null $iterable
+     */
+    public static function new(?iterable $iterable = null): self
     {
+        return new self($iterable);
+    }
+
+    public function filter(?callable $filter = null): self
+    {
+        $filter = $filter ?? function ($value): bool {
+            return (bool) $value;
+        };
+
         return new self($this->iterable, $filter, $this->mapFn);
     }
 

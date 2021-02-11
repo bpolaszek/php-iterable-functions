@@ -111,7 +111,7 @@ function iterable_reduce(iterable $iterable, callable $reduce, $initial = null)
 /**
  * @param iterable<mixed> $iterable
  */
-function iterable(iterable $iterable, ?callable $filter = null, ?callable $map = null): IterableObject
+function iterable(iterable $iterable): IterableObject
 {
-    return new IterableObject($iterable, $filter, $map);
+    return IterableObject::new($iterable);
 }
