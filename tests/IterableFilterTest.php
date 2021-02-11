@@ -5,20 +5,24 @@ declare(strict_types=1);
 namespace BenTools\IterableFunctions\Tests;
 
 use SplFixedArray;
+use Traversable;
 
+use function assert;
 use function BenTools\IterableFunctions\iterable_filter;
-use function BenTools\IterableFunctions\iterable_to_array;
 use function it;
-use function PHPUnit\Framework\assertEquals;
+use function iterator_to_array;
+use function PHPUnit\Framework\assertSame;
 
 it('filters an array', function (): void {
     $iterable = [false, true];
-    assertEquals([1 => true], iterable_to_array(iterable_filter($iterable)));
+    assertSame([1 => true], iterable_filter($iterable));
 });
 
 it('filters a Traversable object', function (): void {
     $iterable = SplFixedArray::fromArray([false, true]);
-    assertEquals([1 => true], iterable_to_array(iterable_filter($iterable)));
+    $filtered = iterable_filter($iterable);
+    assert($filtered instanceof Traversable);
+    assertSame([1 => true], iterator_to_array($filtered));
 });
 
 it('filters an array with a callback', function (): void {
@@ -28,7 +32,7 @@ it('filters an array with a callback', function (): void {
     static function ($input): bool {
         return $input === 'bar';
     };
-    assertEquals([1 => 'bar'], iterable_to_array(iterable_filter($iterable, $filter)));
+    assertSame([1 => 'bar'], iterable_filter($iterable, $filter));
 });
 
 it('filters a Travsersable object with a callback', function (): void {
@@ -38,5 +42,7 @@ it('filters a Travsersable object with a callback', function (): void {
     static function ($input): bool {
         return $input === 'bar';
     };
-    assertEquals([1 => 'bar'], iterable_to_array(iterable_filter($iterable, $filter)));
+    $filtered = iterable_filter($iterable, $filter);
+    assert($filtered instanceof Traversable);
+    assertSame([1 => 'bar'], iterator_to_array($filtered));
 });

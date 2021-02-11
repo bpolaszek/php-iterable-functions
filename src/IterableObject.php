@@ -4,9 +4,14 @@ declare(strict_types=1);
 
 namespace BenTools\IterableFunctions;
 
-use EmptyIterator;
+use CallbackFilterIterator;
 use IteratorAggregate;
+use IteratorIterator;
 use Traversable;
+
+use function array_filter;
+use function array_map;
+use function iterator_to_array;
 
 /**
  * @internal
@@ -18,42 +23,38 @@ final class IterableObject implements IteratorAggregate
     /** @var iterable<mixed> */
     private $iterable;
 
-    /** @var callable|null */
-    private $filterFn;
-
-    /** @var callable|null */
-    private $mapFn;
-
     /**
-     * @param iterable<mixed>|null $iterable
+     * @param iterable<mixed> $iterable
      */
-    private function __construct(?iterable $iterable = null, ?callable $filter = null, ?callable $map = null)
+    public function __construct(iterable $iterable)
     {
-        $this->iterable = $iterable ?? new EmptyIterator();
-        $this->filterFn = $filter;
-        $this->mapFn = $map;
-    }
-
-    /**
-     * @param iterable<mixed>|null $iterable
-     */
-    public static function new(?iterable $iterable = null): self
-    {
-        return new self($iterable);
+        $this->iterable = $iterable;
     }
 
     public function filter(?callable $filter = null): self
     {
-        $filter = $filter ?? function ($value): bool {
-            return (bool) $value;
-        };
+        if ($this->iterable instanceof Traversable) {
+            $filter = $filter ??
+                /** @param mixed $value */
+                static function ($value): bool {
+                    return (bool) $value;
+                };
 
-        return new self($this->iterable, $filter, $this->mapFn);
+            return new self(new CallbackFilterIterator(new IteratorIterator($this->iterable), $filter));
+        }
+
+        $filtered = $filter === null ? array_filter($this->iterable) : array_filter($this->iterable, $filter);
+
+        return new self($filtered);
     }
 
-    public function map(callable $map): self
+    public function map(callable $mapper): self
     {
-        return new self($this->iterable, $this->filterFn, $map);
+        if ($this->iterable instanceof Traversable) {
+            return new self(new MappedTraversable($this->iterable, $mapper));
+        }
+
+        return new self(array_map($mapper, $this->iterable));
     }
 
     /**
@@ -61,30 +62,12 @@ final class IterableObject implements IteratorAggregate
      */
     public function getIterator(): Traversable
     {
-        $iterable = $this->iterable;
-        if ($this->filterFn !== null) {
-            $iterable = iterable_filter($iterable, $this->filterFn);
-        }
-
-        if ($this->mapFn !== null) {
-            $iterable = iterable_map($iterable, $this->mapFn);
-        }
-
-        return iterable_to_traversable($iterable);
+        yield from $this->iterable;
     }
 
     /** @return array<mixed> */
     public function asArray(): array
     {
-        $iterable = $this->iterable;
-        if ($this->filterFn !== null) {
-            $iterable = iterable_filter($iterable, $this->filterFn);
-        }
-
-        if ($this->mapFn !== null) {
-            $iterable = iterable_map($iterable, $this->mapFn);
-        }
-
-        return iterable_to_array($iterable);
+        return $this->iterable instanceof Traversable ? iterator_to_array($this->iterable) : $this->iterable;
     }
 }

@@ -6,188 +6,114 @@ namespace BenTools\IterableFunctions\Tests;
 
 use BenTools\IterableFunctions\IterableObject;
 use Generator;
-use SplFixedArray;
+use IteratorAggregate;
+use Traversable;
 
 use function array_values;
+use function BenTools\CartesianProduct\cartesian_product;
 use function BenTools\IterableFunctions\iterable;
-use function func_num_args;
+use function is_callable;
 use function it;
-use function iterator_to_array;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertInstanceOf;
 use function PHPUnit\Framework\assertSame;
-use function test;
+use function strtolower;
+use function strtoupper;
 
-$dataProvider = static function (): Generator {
-    $data = ['foo', 'bar'];
-    $filter =
-        /** @param mixed $value */
-        static function ($value): bool {
-            return $value === 'bar';
-        };
-    $map = 'strtoupper';
-
-    yield from [
-        [
-            $data,
-            null,
-            null,
-            ['foo', 'bar'],
-        ],
-        [
-            $data,
-            $filter,
-            null,
-            [1 => 'bar'],
-        ],
-        [
-            $data,
-            null,
-            $map,
-            ['FOO', 'BAR'],
-        ],
-        [
-            $data,
-            $filter,
-            $map,
-            [1 => 'BAR'],
-        ],
-    ];
-};
-
-/**
- * @param iterable<mixed> $iterable
- */
-function create_iterable(iterable $iterable, ?callable $filter = null, ?callable $map = null): IterableObject
-{
-    $object = iterable($iterable);
-
-    if ($filter !== null && func_num_args() > 1) {
-        $object = $object->filter($filter);
-    }
-
-    if ($map !== null) {
-        $object = $object->map($map);
-    }
-
-    return $object;
-}
-
-test(
-    'input: array | output: traversable',
-    /** @param array<int, mixed> $data */
-    function (array $data, ?callable $filter, ?callable $map, array $expectedResult): void {
-        $iterableObject = create_iterable($data, $filter, $map);
-        assertEquals($expectedResult, iterator_to_array($iterableObject));
-    }
-)->with($dataProvider());
-
-test(
-    'input: array | output: array',
-    /** @param array<int, mixed> $data */
-    function (array $data, ?callable $filter, ?callable $map, array $expectedResult): void {
-        $iterableObject = create_iterable($data, $filter, $map);
-        assertEquals($expectedResult, $iterableObject->asArray());
-    }
-)->with($dataProvider());
-
-test(
-    'input: traversable | output: traversable',
-    /** @param array<int, mixed> $data */
-    function (array $data, ?callable $filter, ?callable $map, array $expectedResult): void {
-        $data = SplFixedArray::fromArray($data);
-        $iterableObject = create_iterable($data, $filter, $map);
-        assertEquals($expectedResult, iterator_to_array($iterableObject));
-    }
-)->with($dataProvider());
-
-test(
-    'input: traversable | output: array',
-    /** @param array<int, mixed> $data */
-    function (array $data, ?callable $filter, ?callable $map, array $expectedResult): void {
-        $data = SplFixedArray::fromArray($data);
-        $iterableObject = create_iterable($data, $filter, $map);
-        assertEquals($expectedResult, $iterableObject->asArray());
-    }
-)->with($dataProvider());
-
-it('does not filter by default', function (): void {
-    $data = [
+$combinations = cartesian_product([
+    'input' => [
         null,
+        ['', 'foo', 'bar'],
+        new class implements IteratorAggregate {
+            /** @return Traversable<string> */
+            public function getIterator(): Traversable
+            {
+                yield '';
+                yield 'foo';
+                yield 'bar';
+            }
+        },
+    ],
+    'mapper' => [
+        null,
+        static function (): callable {
+            return static function (string $value): string {
+                return strtoupper($value);
+            };
+        },
+    ],
+    'filtered' => [
         false,
         true,
-        0,
-        1,
-        '0',
-        '1',
-        '',
-        'foo',
-    ];
-
-    $generator = function (array $data): Generator {
-        yield from $data;
-    };
-
-    assertSame($data, iterable($data)->asArray());
-    assertSame($data, iterable($generator($data))->asArray());
-});
-
-it('filters the subject', function (): void {
-    $filter =
-        /** @param mixed $value */
-        static function ($value): bool {
-            return $value === 'bar';
-        };
-    $iterableObject = iterable(['foo', 'bar'])->filter($filter);
-    assertEquals([1 => 'bar'], iterator_to_array($iterableObject));
-});
-
-it('uses a truthy filter by default when filter() is invoked without arguments', function (): void {
-    $data = [
+    ],
+    'filter' => [
         null,
-        false,
-        true,
-        0,
-        1,
-        '0',
-        '1',
-        '',
-        'foo',
-    ];
+        static function (): callable {
+            return static function (string $value): bool {
+                return strtolower($value) === 'bar';
+            };
+        },
+    ],
+]);
 
-    $truthyValues = [
-        true,
-        1,
-        '1',
-        'foo',
-    ];
 
-    $generator = function (array $data): Generator {
-        yield from $data;
-    };
+it(
+    'produces the expected result',
+    function (?iterable $input, ?callable $mapper, bool $filtered, ?callable $filter): void {
+        $iterable = iterable($input);
 
-    assertSame($truthyValues, array_values(iterable($data)->filter()->asArray()));
-    assertSame($truthyValues, array_values(iterable($generator($data))->filter()->asArray()));
-});
+        if ($input === null) {
+            assertSame([], $iterable->asArray());
 
-it('maps the subject', function (): void {
-    $map = 'strtoupper';
-    $iterableObject = iterable(['foo', 'bar'])->map($map);
-    assertInstanceOf(IterableObject::class, $iterableObject);
-    assertEquals(['FOO', 'BAR'], iterator_to_array($iterableObject));
-});
+            return;
+        }
 
-it('combines filter and map', function (): void {
-    $filter =
-        /** @param mixed $value */
-        static function ($value): bool {
-            return $value === 'bar';
+        // Default expectation
+        $expected = ['', 'foo', 'bar'];
+
+        // Expectation when iterable is mapped
+        if ($mapper !== null) {
+            $iterable = $iterable->map($mapper);
+            $expected = ['', 'FOO', 'BAR'];
+        }
+
+        // Expectation when iterable is filtered
+        if ($filtered === true) {
+            $iterable = $iterable->filter($filter);
+
+            // empty string should be removed when iterable is filtered without callable
+            unset($expected[0]);
+
+            // empty string and "foo" should be removed otherwise
+            if (is_callable($filter)) {
+                unset($expected[1]);
+            }
+        }
+
+        assertSame($expected, $iterable->asArray());
+    }
+)->with($combinations);
+
+it('can filter first, then map', function (iterable $input): void {
+    $map =
+        /** @return mixed */
+        static function (string $value) {
+            $map = ['zero' => 0, 'one' => 1, 'two' => 2];
+
+            return $map[$value];
         };
-    $map = 'strtoupper';
-    $iterableObject = iterable(['foo', 'bar'])->map($map)->filter($filter);
+    $input = ['zero', 'one', 'two'];
+
+    $iterableObject = iterable($input)->filter()->map($map);
     assertInstanceOf(IterableObject::class, $iterableObject);
-    assertEquals([1 => 'BAR'], iterator_to_array($iterableObject));
-    $iterableObject = iterable(['foo', 'bar'])->filter($filter)->map($map);
-    assertInstanceOf(IterableObject::class, $iterableObject);
-    assertEquals([1 => 'BAR'], iterator_to_array($iterableObject));
+    assertEquals([0, 1, 2], array_values($iterableObject->asArray()));
+})->with(function (): Generator {
+    $input = ['zero', 'one', 'two'];
+    yield [$input];
+    yield [
+        /** @return Generator<string> */
+        (static function (array $input): Generator {
+            yield from $input;
+        })($input),
+    ];
 });
