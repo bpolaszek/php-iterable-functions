@@ -51,9 +51,12 @@ function iterable_to_array(iterable $iterable, bool $preserveKeys = true): array
 /**
  * If the iterable is not instance of Traversable, it is an array => convert it to an ArrayIterator.
  *
- * @param iterable<mixed> $iterable
+ * @param iterable<TKey, TValue> $iterable
  *
- * @return Traversable<mixed>
+ * @return Traversable<TKey, TValue>
+ *
+ * @template TKey
+ * @template TValue
  */
 function iterable_to_traversable(iterable $iterable): Traversable
 {
