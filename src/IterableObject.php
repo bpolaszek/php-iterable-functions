@@ -11,7 +11,6 @@ use Traversable;
 
 use function array_filter;
 use function array_map;
-use function iterator_to_array;
 
 /**
  * @internal
@@ -74,11 +73,5 @@ final class IterableObject implements IteratorAggregate
     public function getIterator(): Traversable
     {
         yield from $this->iterable;
-    }
-
-    /** @return array<array-key, TValue> */
-    public function asArray(): array
-    {
-        return $this->iterable instanceof Traversable ? iterator_to_array($this->iterable) : $this->iterable;
     }
 }

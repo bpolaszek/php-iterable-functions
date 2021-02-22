@@ -28,7 +28,7 @@ function iterable_map(iterable $iterable, callable $mapper): iterable
 {
     $mapped = iterable($iterable)->map($mapper);
 
-    return is_array($iterable) ? $mapped->asArray() : $mapped;
+    return is_array($iterable) ? iterable_to_array($mapped) : $mapped;
 }
 
 /**
@@ -88,7 +88,7 @@ function iterable_filter(iterable $iterable, ?callable $filter = null): iterable
 {
     $filtered = iterable($iterable)->filter($filter);
 
-    return is_array($iterable) ? $filtered->asArray() : $filtered;
+    return is_array($iterable) ? iterable_to_array($filtered) : $filtered;
 }
 
 /**

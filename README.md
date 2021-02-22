@@ -155,12 +155,6 @@ $data = fn() => yield from $data;
 $iterable = iterable($data())->filter(fn($eatable) => 'rock' !== $eatable)->map('strtoupper'); // Traversable of ['banana', 'pineapple']
 ```
 
-Array output:
-
-```php
-$iterable->asArray(); // array ['banana', 'pineapple']
-```
-
 Installation
 ============
 

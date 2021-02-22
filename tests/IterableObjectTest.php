@@ -12,6 +12,7 @@ use Traversable;
 use function array_values;
 use function BenTools\CartesianProduct\cartesian_product;
 use function BenTools\IterableFunctions\iterable;
+use function BenTools\IterableFunctions\iterable_to_array;
 use function is_callable;
 use function it;
 use function PHPUnit\Framework\assertEquals;
@@ -63,7 +64,7 @@ it(
         $iterable = iterable($input);
 
         if ($input === null) {
-            assertSame([], $iterable->asArray());
+            assertSame([], iterable_to_array($iterable));
 
             return;
         }
@@ -90,7 +91,7 @@ it(
             }
         }
 
-        assertSame($expected, $iterable->asArray());
+        assertSame($expected, iterable_to_array($iterable));
     }
 )->with($combinations);
 
@@ -106,7 +107,7 @@ it('can filter first, then map', function (iterable $input): void {
 
     $iterableObject = iterable($input)->filter()->map($map);
     assertInstanceOf(IterableObject::class, $iterableObject);
-    assertEquals([0, 1, 2], array_values($iterableObject->asArray()));
+    assertEquals([0, 1, 2], array_values(iterable_to_array($iterableObject)));
 })->with(function (): Generator {
     $input = ['zero', 'one', 'two'];
     yield [$input];
