@@ -128,6 +128,25 @@ foreach (iterable_filter($generator(), $filter) as $item) {
 }
 ```
 
+iterable_values()
+--------------
+
+Works like an `array_values` with an `array` or a `Traversable`.
+
+```php
+use function BenTools\IterableFunctions\iterable_values;
+
+$generator = function () {
+    yield 'a' => 'a';
+    yield 'b' => 'b';
+};
+
+foreach (iterable_values($generator()) as $key => $value) {
+    var_dump($key); // 0, 1
+    var_dump($value); // a, b
+}
+```
+
 Iterable fluent interface
 =========================
 

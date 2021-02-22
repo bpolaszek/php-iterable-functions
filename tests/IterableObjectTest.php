@@ -116,3 +116,11 @@ it('can filter first, then map', function (iterable $input): void {
         })($input),
     ];
 });
+
+it('strips key through values()', function (): void {
+    $input = ['x' => 'zero', 'y' => 'one', 'z' => 'two'];
+
+    $iterableObject = iterable($input)->values();
+    assertInstanceOf(IterableObject::class, $iterableObject);
+    assertEquals(['zero', 'one', 'two'], $iterableObject->asArray());
+});
