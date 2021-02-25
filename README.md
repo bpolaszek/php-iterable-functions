@@ -7,7 +7,13 @@
 Iterable functions
 ==================
 
-Provides additional functions to work with [iterable](https://wiki.php.net/rfc/iterable) variables (even on PHP5.3+).
+This package provides functions to work with [iterables](https://wiki.php.net/rfc/iterable), as you usually do with arrays:
+
+- [iterable_to_array()](#iterable_to_array)
+- [iterable_to_traversable()](#iterable_to_traversable)
+- [iterable_map()](#iterable_map)
+- [iterable_reduce()](#iterable_reduce)
+- [iterable_filter()](#iterable_filter)
 
 iterable_to_array()
 -------------------
