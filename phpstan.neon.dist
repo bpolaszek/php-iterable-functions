@@ -10,3 +10,6 @@ parameters:
         - '~Method BenTools\\IterableFunctions\\IterableObject::map\(\) should return BenTools\\IterableFunctions\\IterableObject<TKey, TResult> but returns BenTools\\IterableFunctions\\IterableObject<int\|string, TResult>~'
 
         - '~Function BenTools\\IterableFunctions\\iterable_map\(\) should return iterable<TKey, TResult> but returns array<TResult>\|BenTools\\IterableFunctions\\IterableObject<TKey, TResult>~'
+
+includes:
+    - phpstan-baseline.neon
