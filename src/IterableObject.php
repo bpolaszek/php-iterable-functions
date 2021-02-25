@@ -70,6 +70,14 @@ final class IterableObject implements IteratorAggregate
         return new self(array_map($mapper, $this->iterable));
     }
 
+    /**
+     * @return self<int, TValue>
+     */
+    public function values(): self
+    {
+        return new self(new WithoutKeysTraversable($this->iterable));
+    }
+
     /** @return Traversable<TKey, TValue> */
     public function getIterator(): Traversable
     {

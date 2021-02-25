@@ -115,6 +115,22 @@ function iterable_reduce(iterable $iterable, callable $reduce, $initial = null)
 }
 
 /**
+ * Yields iterable values (leaving out keys).
+ *
+ * @param iterable<TValue> $iterable
+ *
+ * @return iterable<int, TValue>
+ *
+ * @template TValue
+ */
+function iterable_values(iterable $iterable): iterable
+{
+    $withoutKeys = iterable($iterable)->values();
+
+    return is_array($iterable) ? $withoutKeys->asArray() : $withoutKeys;
+}
+
+/**
  * @param iterable<TKey, TValue>|null $iterable
  *
  * @return IterableObject<TKey, TValue>
