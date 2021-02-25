@@ -95,10 +95,10 @@ function iterable_filter(iterable $iterable, ?callable $filter = null): iterable
  * Reduces an iterable.
  *
  * @param iterable<TValue> $iterable
- * @param callable(TResult|null, TValue):TResult $reduce
- * @param TResult|null $initial
+ * @param TResult $initial
+ * @param callable(TResult, TValue):TResult $reduce
  *
- * @return TResult|null
+ * @return TResult
  *
  * @template TValue
  * @template TResult
