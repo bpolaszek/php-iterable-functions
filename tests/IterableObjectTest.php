@@ -102,7 +102,6 @@ it('can filter first, then map', function (iterable $input): void {
 
             return $map[$value];
         };
-    $input = ['zero', 'one', 'two'];
 
     $iterableObject = iterable($input)->filter()->map($map);
     assertInstanceOf(IterableObject::class, $iterableObject);
