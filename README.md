@@ -14,6 +14,7 @@ This package provides functions to work with [iterables](https://wiki.php.net/rf
 - [iterable_map()](#iterable_map)
 - [iterable_reduce()](#iterable_reduce)
 - [iterable_filter()](#iterable_filter)
+- [iterable_values()](#iterable_values)
 
 iterable_to_array()
 -------------------
