@@ -1,0 +1,12 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Parameter \\#1 \\$ of callable callable\\(TResult, TValue\\)\\: TResult expects TResult, TResult\\|null given\\.$#"
+			count: 1
+			path: src/iterable-functions.php
+
+		-
+			message: "#^Function BenTools\\\\IterableFunctions\\\\iterable_reduce\\(\\) should return TResult but returns TResult\\|null\\.$#"
+			count: 1
+			path: src/iterable-functions.php
+
