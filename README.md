@@ -190,17 +190,12 @@ $iterable->asArray(); // array ['banana', 'pineapple']
 Installation
 ============
 
-With composer (they'll be autoloaded):
-
 ```
-composer require bentools/iterable-functions
+composer require bentools/iterable-functions:^2.0
 ```
 
-Or manually:
+For PHP5+ compatibility, check out the [1.x branch](https://github.com/bpolaszek/php-iterable-functions/tree/1.x).
 
-```php
-require_once '/path/to/this/library/src/iterable-functions.php';
-```
 
 Unit tests
 ==========
