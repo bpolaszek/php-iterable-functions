@@ -9,7 +9,6 @@ use EmptyIterator;
 use Traversable;
 
 use function array_values;
-use function is_array;
 use function iterator_to_array;
 
 /**
@@ -26,9 +25,7 @@ use function iterator_to_array;
  */
 function iterable_map(iterable $iterable, callable $mapper): iterable
 {
-    $mapped = iterable($iterable)->map($mapper);
-
-    return is_array($iterable) ? $mapped->asArray() : $mapped;
+    return iterable($iterable)->map($mapper);
 }
 
 /**
@@ -86,9 +83,7 @@ function iterable_to_traversable(iterable $iterable): Traversable
  */
 function iterable_filter(iterable $iterable, ?callable $filter = null): iterable
 {
-    $filtered = iterable($iterable)->filter($filter);
-
-    return is_array($iterable) ? $filtered->asArray() : $filtered;
+    return iterable($iterable)->filter($filter);
 }
 
 /**
@@ -125,9 +120,7 @@ function iterable_reduce(iterable $iterable, callable $reduce, $initial = null)
  */
 function iterable_values(iterable $iterable): iterable
 {
-    $withoutKeys = iterable($iterable)->values();
-
-    return is_array($iterable) ? $withoutKeys->asArray() : $withoutKeys;
+    return iterable($iterable)->values();
 }
 
 /**

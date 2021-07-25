@@ -9,13 +9,14 @@ use Traversable;
 
 use function assert;
 use function BenTools\IterableFunctions\iterable_filter;
+use function BenTools\IterableFunctions\iterable_to_array;
 use function it;
 use function iterator_to_array;
 use function PHPUnit\Framework\assertSame;
 
 it('filters an array', function (): void {
     $iterable = [false, true];
-    assertSame([1 => true], iterable_filter($iterable));
+    assertSame([1 => true], iterable_to_array(iterable_filter($iterable)));
 });
 
 it('filters a Traversable object', function (): void {
@@ -32,7 +33,7 @@ it('filters an array with a callback', function (): void {
     static function ($input): bool {
         return $input === 'bar';
     };
-    assertSame([1 => 'bar'], iterable_filter($iterable, $filter));
+    assertSame([1 => 'bar'], iterable_to_array(iterable_filter($iterable, $filter)));
 });
 
 it('filters a Travsersable object with a callback', function (): void {

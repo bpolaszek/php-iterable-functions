@@ -12,15 +12,15 @@ use Traversable;
 
 use function assert;
 use function BenTools\IterableFunctions\iterable_map;
+use function BenTools\IterableFunctions\iterable_to_array;
 use function it;
-use function iterator_to_array;
 use function PHPUnit\Framework\assertInstanceOf;
 use function PHPUnit\Framework\assertSame;
 
 it('maps an array', function (): void {
     $iterable = ['foo', 'bar'];
     $map = 'strtoupper';
-    assertSame(['FOO', 'BAR'], iterable_map($iterable, $map));
+    assertSame(['FOO', 'BAR'], iterable_to_array(iterable_map($iterable, $map)));
 });
 
 it('maps a Traversable object', function (): void {
@@ -28,7 +28,7 @@ it('maps a Traversable object', function (): void {
     $map = 'strtoupper';
     $mapped = iterable_map($iterable, $map);
     assert($mapped instanceof Traversable);
-    assertSame(['FOO', 'BAR'], iterator_to_array($mapped));
+    assertSame(['FOO', 'BAR'], iterable_to_array($mapped));
 });
 
 it('maps iterable with object keys', function (): void {
