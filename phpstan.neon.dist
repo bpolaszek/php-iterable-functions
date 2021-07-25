@@ -4,12 +4,3 @@ parameters:
         - %currentWorkingDirectory%/src
         - %currentWorkingDirectory%/tests
 
-    ignoreErrors:
-        # https://github.com/phpstan/phpstan/issues/4498
-        - '~Method BenTools\\IterableFunctions\\IterableObject::filter\(\) should return BenTools\\IterableFunctions\\IterableObject<TKey, TValue> but returns BenTools\\IterableFunctions\\IterableObject<int\|string, mixed>~'
-        - '~Method BenTools\\IterableFunctions\\IterableObject::map\(\) should return BenTools\\IterableFunctions\\IterableObject<TKey, TResult> but returns BenTools\\IterableFunctions\\IterableObject<int\|string, TResult>~'
-
-        - '~Function BenTools\\IterableFunctions\\iterable_map\(\) should return iterable<TKey, TResult> but returns array<TResult>\|BenTools\\IterableFunctions\\IterableObject<TKey, TResult>~'
-
-includes:
-    - phpstan-baseline.neon
