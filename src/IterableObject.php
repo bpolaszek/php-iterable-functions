@@ -40,7 +40,7 @@ final class IterableObject implements IteratorAggregate
     public function filter(?callable $filter = null): self
     {
         if ($this->iterable instanceof Traversable) {
-            $filter = $filter ??
+            $filter ??=
                 /** @param mixed $value */
                 static function ($value): bool {
                     return (bool) $value;
