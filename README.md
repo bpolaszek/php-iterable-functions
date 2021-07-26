@@ -1,29 +1,20 @@
 [![Latest Stable Version](https://poser.pugx.org/bentools/iterable-functions/v/stable)](https://packagist.org/packages/bentools/iterable-functions)
-[![License](https://poser.pugx.org/bentools/iterable-functions/license)](https://packagist.org/packages/bentools/iterable-functions)
-[![Build Status](https://img.shields.io/travis/bpolaszek/php-iterable-functions/master.svg?style=flat-square)](https://travis-ci.org/bpolaszek/php-iterable-functions)
-[![Coverage Status](https://coveralls.io/repos/github/bpolaszek/php-iterable-functions/badge.svg?branch=master)](https://coveralls.io/github/bpolaszek/php-iterable-functions?branch=master)
-[![Quality Score](https://img.shields.io/scrutinizer/g/bpolaszek/php-iterable-functions.svg?style=flat-square)](https://scrutinizer-ci.com/g/bpolaszek/php-iterable-functions)
+[![GitHub Actions][GA master image]][GA master]
+[![Code Coverage][Coverage image]][CodeCov Master]
+[![Shepherd Type][Shepherd Image]][Shepherd Link]
 [![Total Downloads](https://poser.pugx.org/bentools/iterable-functions/downloads)](https://packagist.org/packages/bentools/iterable-functions)
 
 Iterable functions
 ==================
 
-Provides additional functions to work with [iterable](https://wiki.php.net/rfc/iterable) variables (even on PHP5.3+).
+This package provides functions to work with [iterables](https://wiki.php.net/rfc/iterable), as you usually do with arrays:
 
-is_iterable()
--------------
-To check wether or not a PHP variable can be looped over in a `foreach` statement, PHP provides an `is_iterable()` function.
-
-**But this function only works on PHP7.1+**.
-
-This library ships a polyfill of this function for previous PHP versions.
-
-Usage:
-```php
-var_dump(is_iterable(array('foo', 'bar'))); // true
-var_dump(is_iterable(new DirectoryIterator(__DIR__))); // true
-var_dump(is_iterable('foobar')); // false
-```
+- [iterable_to_array()](#iterable_to_array)
+- [iterable_to_traversable()](#iterable_to_traversable)
+- [iterable_map()](#iterable_map)
+- [iterable_reduce()](#iterable_reduce)
+- [iterable_filter()](#iterable_filter)
+- [iterable_values()](#iterable_values)
 
 iterable_to_array()
 -------------------
@@ -32,13 +23,15 @@ PHP offers an `iterator_to_array()` function to export any iterator into an arra
 
 **But when you want to transform an `iterable` to an array, the `iterable` itself can already be an array.**
 
-When using `iterator_to_array()` with an array, PHP5 triggers a E_RECOVERABLE_ERROR while PHP7 throws a `TypeError`.
+When using `iterator_to_array()` with an iterable, that happens to be an array, PHP will throw a `TypeError`.
 
 If you need an iterable-agnostic function, try our `iterable_to_array()`:
 
 ```php
-var_dump(iterable_to_array(new ArrayIterator(array('foo', 'bar')))); // ['foo', 'bar']
-var_dump(iterable_to_array(array('foo', 'bar'))); // ['foo', 'bar']
+use function BenTools\IterableFunctions\iterable_to_array;
+
+var_dump(iterable_to_array(new \ArrayIterator(['foo', 'bar']))); // ['foo', 'bar']
+var_dump(iterable_to_array(['foo', 'bar'])); // ['foo', 'bar']
 ```
 
 iterable_to_traversable()
@@ -50,11 +43,13 @@ If your variable is already an instance of `Traversable` (i.e. an `Iterator`, an
 If your variable is an array, the function converts it to an `ArrayIterator`.
 
 Usage:
-```php
-var_dump(iterable_to_traversable(array('foo', 'bar'))); // ArrayIterator(array('foo', 'bar'))
-var_dump(iterable_to_traversable(new ArrayIterator(array('foo', 'bar')))); // ArrayIterator(array('foo', 'bar'))
-```
 
+```php
+use function BenTools\IterableFunctions\iterable_to_traversable;
+
+var_dump(iterable_to_traversable(['foo', 'bar'])); // \ArrayIterator(['foo', 'bar'])
+var_dump(iterable_to_traversable(new \ArrayIterator(['foo', 'bar']))); // \ArrayIterator(['foo', 'bar'])
+```
 
 iterable_map()
 --------------
@@ -62,6 +57,8 @@ iterable_map()
 Works like an `array_map` with an `array` or a `Traversable`.
 
 ```php
+use function BenTools\IterableFunctions\iterable_map;
+
 $generator = function () {
     yield 'foo';
     yield 'bar';
@@ -78,6 +75,8 @@ iterable_reduce()
 Works like an `reduce` with an `iterable`.
 
 ```php
+use function BenTools\IterableFunctions\iterable_reduce;
+
 $generator = function () {
     yield 1;
     yield 2;
@@ -98,6 +97,8 @@ iterable_filter()
 Works like an `array_filter` with an `array` or a `Traversable`.
 
 ```php
+use function BenTools\IterableFunctions\iterable_filter;
+
 $generator = function () {
     yield 0;
     yield 1;
@@ -109,7 +110,10 @@ foreach (iterable_filter($generator()) as $item) {
 ```
 
 Of course you can define your own filter:
+
 ```php
+use function BenTools\IterableFunctions\iterable_filter;
+
 $generator = function () {
     yield 'foo';
     yield 'bar';
@@ -125,69 +129,89 @@ foreach (iterable_filter($generator(), $filter) as $item) {
 }
 ```
 
+iterable_values()
+--------------
 
-Iterable factory
-================
-
-When you have an `iterable` type-hint somewhere, and don't know in advance wether you'll pass an `array` or a `Traversable`, just call the magic `iterable()` factory:
+Works like an `array_values` with an `array` or a `Traversable`.
 
 ```php
-interface SomeInterface
-{
-    /**
-     * Return an iterable list of items
-     *
-     * @return iterable
-     */
-    public function getItems(): iterable;
-}
+use function BenTools\IterableFunctions\iterable_values;
 
-class MyService implements SomeInterface
-{
-    /**
-     * @inheritdoc
-     */
-    public function getItems(): iterable
-    {
-        return iterable($this->someOtherService->findAll()):
-    }
+$generator = function () {
+    yield 'a' => 'a';
+    yield 'b' => 'b';
+};
 
+foreach (iterable_values($generator()) as $key => $value) {
+    var_dump($key); // 0, 1
+    var_dump($value); // a, b
 }
 ```
 
-It even accepts a `null` value (then converting it to an `EmptyIterator`).
+Iterable fluent interface
+=========================
 
-You may add a `filter` callable and a `map` callable to make your life easier:
+The `iterable` function allows you to wrap an iterable and apply some common operations.
+
+With an array input:
 
 ```php
+use function BenTools\IterableFunctions\iterable;
 $data = [
     'banana',
     'pineapple',
-    'potato',
+    'rock',
 ];
 
-$isFruit = function ($eatable) {
-    return 'potato' !== $eatable;
-};
+$iterable = iterable($data)->filter(fn($eatable) => 'rock' !== $eatable)->map('strtoupper'); // Traversable of ['banana', 'pineapple']
+```
 
-var_dump(iterator_to_array(iterable($data)->filter($isFruit)->map('strtoupper'))); // ['banana', 'pineapple']
+With a traversable input:
+
+```php
+use function BenTools\IterableFunctions\iterable;
+$data = [
+    'banana',
+    'pineapple',
+    'rock',
+];
+
+$data = fn() => yield from $data;
+
+$iterable = iterable($data())->filter(fn($eatable) => 'rock' !== $eatable)->map('strtoupper'); // Traversable of ['banana', 'pineapple']
+```
+
+Array output:
+
+```php
+$iterable->asArray(); // array ['banana', 'pineapple']
 ```
 
 Installation
 ============
 
-With composer (they'll be autoloaded):
 ```
-composer require bentools/iterable-functions
+composer require bentools/iterable-functions:^2.0
 ```
 
-Or manually:
-```php
-require_once '/path/to/this/library/src/iterable-functions.php';
-```
+For PHP5+ compatibility, check out the [1.x branch](https://github.com/bpolaszek/php-iterable-functions/tree/1.x).
+
 
 Unit tests
 ==========
+
 ```
-./vendor/bin/phpunit
+php vendor/bin/pest
 ```
+
+[GA master]: https://github.com/bpolaszek/php-iterable-functions/actions?query=workflow%3A%22Continuous+Integration%22+branch%3A2.0.x-dev
+
+[GA master image]: https://github.com/bpolaszek/php-iterable-functions/workflows/Continuous%20Integration/badge.svg
+
+[CodeCov Master]: https://codecov.io/gh/bpolaszek/php-iterable-functions/branch/2.0.x-dev
+
+[Coverage image]: https://codecov.io/gh/bpolaszek/php-iterable-functions/branch/2.0.x-dev/graph/badge.svg
+
+[Shepherd Image]: https://shepherd.dev/github/bpolaszek/php-iterable-functions/coverage.svg
+
+[Shepherd Link]: https://shepherd.dev/github/bpolaszek/php-iterable-functions
