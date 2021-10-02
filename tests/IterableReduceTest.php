@@ -23,5 +23,5 @@ it('reduces an traversable', function (): void {
     $reduce = static function (?int $carry, int $item): int {
         return (int) $carry + $item;
     };
-    assertSame(3, iterable_reduce($iterable, $reduce, 0));
+    assertSame(3, iterable_reduce($iterable, $reduce, 0)); // @phpstan-ignore-line
 });

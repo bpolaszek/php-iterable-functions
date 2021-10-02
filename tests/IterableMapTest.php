@@ -26,7 +26,7 @@ it('maps an array', function (): void {
 it('maps a Traversable object', function (): void {
     $iterable = SplFixedArray::fromArray(['foo', 'bar']);
     $map = 'strtoupper';
-    $mapped = iterable_map($iterable, $map);
+    $mapped = iterable_map($iterable, $map); // @phpstan-ignore-line
     assert($mapped instanceof Traversable);
     assertSame(['FOO', 'BAR'], iterable_to_array($mapped));
 });
