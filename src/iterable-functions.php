@@ -37,8 +37,7 @@ function iterable_map(iterable $iterable, callable $mapper): iterable
  * @return array<array-key, TValue>
  *
  * @psalm-return ($preserveKeys is true ? array<TKey, TValue> : array<int, TValue>)
- * @psalm-template TKey as array-key
- * @phpstan-template TKey
+ * @template TKey of array-key
  * @template TValue
  */
 function iterable_to_array(iterable $iterable, bool $preserveKeys = true): array
@@ -75,9 +74,7 @@ function iterable_to_traversable(iterable $iterable): Traversable
  * @param (callable(TValue):bool)|null $filter
  *
  * @psalm-param iterable<TKey, TValue> $iterable
- * @phpstan-param iterable<array-key, TValue> $iterable https://github.com/phpstan/phpstan/issues/4498
  * @psalm-return iterable<TKey, TValue>
- * @phpstan-return iterable<array-key, TValue> https://github.com/phpstan/phpstan/issues/4498
  * @template TKey
  * @template TValue
  */
