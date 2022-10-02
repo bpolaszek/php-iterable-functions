@@ -124,3 +124,26 @@ it('strips key through values()', function (): void {
     assertInstanceOf(IterableObject::class, $iterableObject);
     assertEquals(['zero', 'one', 'two'], $iterableObject->asArray());
 });
+
+it('merge iterators', function (iterable $input, array $mergeInputs, array $expected): void {
+    $iterableObject = iterable($input)->merge(...$mergeInputs);
+    assertInstanceOf(IterableObject::class, $iterableObject);
+    assertEquals($expected, $iterableObject->asArray());
+})->with(function (): Generator {
+    yield 'no merge arg return initial iterable' => [['zero', 'one', 'two'], [], ['zero', 'one', 'two']];
+    yield 'all values merged' => [
+        ['zero', 'one', 'two'],
+        [
+            ['three', 'four', 'five'],
+        ],
+        ['zero', 'one', 'two', 'three', 'four', 'five'],
+    ];
+    yield 'merge all args into a new iterable' => [
+        [0 => 'zero', 1 => 'one', 2 => 'two'],
+        [
+            [3 => 'three', 4 => 'four'],
+            [5 => 'five', 6 => 'six', 7 => 'seven'],
+        ],
+        [0 => 'zero', 1 => 'one', 2 => 'two', 3 => 'three', 4 => 'four', 5 => 'five', 6 => 'six', 7 => 'seven'],
+    ];
+});

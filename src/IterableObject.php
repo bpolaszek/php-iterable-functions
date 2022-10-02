@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace BenTools\IterableFunctions;
 
+use AppendIterator;
+use ArrayIterator;
 use CallbackFilterIterator;
+use Iterator;
 use IteratorAggregate;
 use IteratorIterator;
 use Traversable;
@@ -26,10 +29,14 @@ final class IterableObject implements IteratorAggregate
     /** @var iterable<TKey, TValue> */
     private $iterable;
 
+    /** @var bool */
+    private $preserveKeys;
+
     /** @param iterable<TKey, TValue> $iterable */
-    public function __construct(iterable $iterable)
+    public function __construct(iterable $iterable, bool $preserveKeys = true)
     {
         $this->iterable = $iterable;
+        $this->preserveKeys = $preserveKeys;
     }
 
     /**
@@ -71,6 +78,35 @@ final class IterableObject implements IteratorAggregate
     }
 
     /**
+     * @param iterable<TKey, TValue> ...$args
+     *
+     * @return self<TKey, TValue>
+     */
+    public function merge(iterable ...$args): self
+    {
+        if ($args === []) {
+            return $this;
+        }
+
+        $toIterator = static function (iterable $iterable): Iterator {
+            if ($iterable instanceof Traversable) {
+                return new IteratorIterator($iterable);
+            }
+
+            return new ArrayIterator($iterable);
+        };
+
+        $iterator = new AppendIterator();
+        $iterator->append($toIterator($this->iterable));
+
+        foreach ($args as $iterable) {
+            $iterator->append($toIterator($iterable));
+        }
+
+        return new self($iterator, false);
+    }
+
+    /**
      * @return self<int, TValue>
      */
     public function values(): self
@@ -87,6 +123,6 @@ final class IterableObject implements IteratorAggregate
     /** @return array<array-key, TValue> */
     public function asArray(): array
     {
-        return $this->iterable instanceof Traversable ? iterator_to_array($this->iterable) : $this->iterable;
+        return $this->iterable instanceof Traversable ? iterator_to_array($this->iterable, $this->preserveKeys) : $this->iterable;
     }
 }

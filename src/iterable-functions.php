@@ -8,6 +8,7 @@ use ArrayIterator;
 use EmptyIterator;
 use Traversable;
 
+use function array_slice;
 use function array_values;
 use function iterator_to_array;
 
@@ -26,6 +27,21 @@ use function iterator_to_array;
 function iterable_map(iterable $iterable, callable $mapper): iterable
 {
     return iterable($iterable)->map($mapper);
+}
+
+/**
+ * Merge iterables
+ *
+ * @param iterable<TKey, TValue> ...$args
+ *
+ * @return IterableObject<TKey, TValue>
+ *
+ * @template TKey
+ * @template TValue
+ */
+function iterable_merge(iterable ...$args): iterable
+{
+    return iterable($args[0] ?? null)->merge(...array_slice($args, 1));
 }
 
 /**
