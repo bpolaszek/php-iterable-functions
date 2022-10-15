@@ -12,6 +12,7 @@ This package provides functions to work with [iterables](https://wiki.php.net/rf
 - [iterable_to_array()](#iterable_to_array)
 - [iterable_to_traversable()](#iterable_to_traversable)
 - [iterable_map()](#iterable_map)
+- [iterable_merge()](#iterable_merge)
 - [iterable_reduce()](#iterable_reduce)
 - [iterable_filter()](#iterable_filter)
 - [iterable_values()](#iterable_values)
@@ -66,6 +67,27 @@ $generator = function () {
 
 foreach (iterable_map($generator(), 'strtoupper') as $item) {
     var_dump($item); // FOO, BAR
+}
+```
+
+iterable_merge()
+--------------
+
+Works like an `array_merge` with an `array` or a `Traversable`.
+
+```php
+use function BenTools\IterableFunctions\iterable_merge;
+
+$generator1 = function () {
+    yield 'foo';
+};
+
+$generator2 = function () {
+    yield 'bar';
+};
+
+foreach (iterable_merge($generator1(), $generator2()) as $item) {
+    var_dump($item); // foo, bar
 }
 ```
 
