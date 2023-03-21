@@ -47,7 +47,7 @@ function iterable_merge(iterable ...$args): iterable
 /**
  * Copy the iterable into an array.
  *
- * @param iterable<array-key, TValue> $iterable
+ * @param iterable<TKey, TValue> $iterable
  * @param bool $preserveKeys [optional] Whether to use the iterator element keys as index.
  *
  * @return array<array-key, TValue>
