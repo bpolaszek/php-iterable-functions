@@ -52,7 +52,7 @@ function iterable_merge(iterable ...$args): iterable
  *
  * @return array<array-key, TValue>
  *
- * @psalm-return ($preserveKeys is true ? array<TKey, TValue> : array<int, TValue>)
+ * @psalm-return ($preserveKeys is true ? array<TKey, TValue> : list<TValue>)
  * @template TKey of array-key
  * @template TValue
  */
