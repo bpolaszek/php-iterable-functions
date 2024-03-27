@@ -87,7 +87,7 @@ function iterable_to_traversable(iterable $iterable): Traversable
 /**
  * Filters an iterable.
  *
- * @param (callable(TValue):bool)|null $filter
+ * @param (callable(TValue):bool)|(callable(TValue,TKey):bool)|null $filter
  *
  * @psalm-param iterable<TKey, TValue> $iterable
  * @psalm-return iterable<TKey, TValue>
