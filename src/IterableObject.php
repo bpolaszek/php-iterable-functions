@@ -16,6 +16,8 @@ use function array_filter;
 use function array_map;
 use function iterator_to_array;
 
+use const ARRAY_FILTER_USE_BOTH;
+
 /**
  * @internal
  *
@@ -40,7 +42,7 @@ final class IterableObject implements IteratorAggregate
     }
 
     /**
-     * @param (callable(TValue):bool)|null $filter
+     * @param (callable(TValue):bool)|(callable(TValue,TKey):bool)|null $filter
      *
      * @return self<TKey, TValue>
      */
@@ -56,7 +58,9 @@ final class IterableObject implements IteratorAggregate
             return new self(new CallbackFilterIterator(new IteratorIterator($this->iterable), $filter));
         }
 
-        $filtered = $filter === null ? array_filter($this->iterable) : array_filter($this->iterable, $filter);
+        $filtered = $filter === null
+            ? array_filter($this->iterable)
+            : array_filter($this->iterable, $filter, ARRAY_FILTER_USE_BOTH);
 
         return new self($filtered);
     }
