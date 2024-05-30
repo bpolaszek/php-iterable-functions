@@ -16,6 +16,7 @@ This package provides functions to work with [iterables](https://wiki.php.net/rf
 - [iterable_reduce()](#iterable_reduce)
 - [iterable_filter()](#iterable_filter)
 - [iterable_values()](#iterable_values)
+- [iterable_chunk()](#iterable_chunk)
 
 iterable_to_array()
 -------------------
@@ -168,6 +169,33 @@ foreach (iterable_values($generator()) as $key => $value) {
     var_dump($key); // 0, 1
     var_dump($value); // a, b
 }
+```
+
+iterable_chunk()
+--------------
+
+Here's an `array_chunk`-like function that also works with a `Traversable`.
+
+```php
+use function BenTools\IterableFunctions\iterable_chunk;
+
+$fruits = [
+    'banana',
+    'apple',
+    'strawberry',
+    'raspberry',
+    'pineapple',
+]
+$fruits = (fn () => yield from $fruits)()
+iterable_chunk($fruits, 2);
+
+/*
+  [
+    ['banana', 'apple'],
+    ['strawberry', 'raspberry'],
+    ['pineapple'],
+  ]
+ */
 ```
 
 Iterable fluent interface
