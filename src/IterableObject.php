@@ -12,6 +12,7 @@ use IteratorAggregate;
 use IteratorIterator;
 use Traversable;
 
+use function array_chunk;
 use function array_filter;
 use function array_map;
 use function iterator_to_array;
@@ -116,6 +117,16 @@ final class IterableObject implements IteratorAggregate
     public function values(): self
     {
         return new self(new WithoutKeysTraversable($this->iterable));
+    }
+
+    /** @return iterable<int, array<TKey, TValue>> */
+    public function chunk(int $size): iterable
+    {
+        if ($this->iterable instanceof Traversable) {
+            return new ChunkIterator($this->iterable, $size, $this->preserveKeys);
+        }
+
+        return array_chunk($this->iterable, $size, $this->preserveKeys);
     }
 
     /** @return Traversable<TKey, TValue> */
