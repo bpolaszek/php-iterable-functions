@@ -141,7 +141,7 @@ function iterable_values(iterable $iterable): iterable
  *
  * @param iterable<TKey, TValue> $iterable
  *
- * @return iterable<array<TKey, TValue>>
+ * @return iterable<iterable<TKey, TValue>>
  *
  * @template TKey
  * @template TValue
