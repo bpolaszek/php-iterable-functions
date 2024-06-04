@@ -57,4 +57,4 @@ jobs:
         uses: "ramsey/composer-install@v1"
 
       - name: "Run a static analysis with vimeo/psalm"
-        run: "vendor/bin/psalm
+        run: "vendor/bin/psalm"

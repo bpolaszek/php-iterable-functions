@@ -119,7 +119,7 @@ final class IterableObject implements IteratorAggregate
         return new self(new WithoutKeysTraversable($this->iterable));
     }
 
-    /** @return iterable<int, array<TKey, TValue>> */
+    /** @return iterable<int, iterable<TKey, TValue>> */
     public function chunk(int $size): iterable
     {
         if ($this->iterable instanceof Traversable) {
