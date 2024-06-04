@@ -137,6 +137,21 @@ function iterable_values(iterable $iterable): iterable
 }
 
 /**
+ * Split an iterable into chunks
+ *
+ * @param iterable<TKey, TValue> $iterable
+ *
+ * @return iterable<iterable<TKey, TValue>>
+ *
+ * @template TKey
+ * @template TValue
+ */
+function iterable_chunk(iterable $iterable, int $size, bool $preserveKeys = false): iterable
+{
+    return iterable($iterable, $preserveKeys)->chunk($size);
+}
+
+/**
  * @param iterable<TKey, TValue>|null $iterable
  *
  * @return IterableObject<TKey, TValue>
@@ -144,7 +159,7 @@ function iterable_values(iterable $iterable): iterable
  * @template TKey
  * @template TValue
  */
-function iterable(?iterable $iterable): IterableObject
+function iterable(?iterable $iterable, bool $preserveKeys = true): IterableObject
 {
-    return new IterableObject($iterable ?? new EmptyIterator());
+    return new IterableObject($iterable ?? new EmptyIterator(), $preserveKeys);
 }
